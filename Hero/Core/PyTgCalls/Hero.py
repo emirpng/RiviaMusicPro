@@ -295,19 +295,19 @@ async def join_video_stream(chat_id: int, link: str, quality):
 ### Multi Assistant Pause
 
 
-async def durdur_stream(chat_id: int):
+async def pause_stream(chat_id: int):
     _assistant = await get_assistant(chat_id, "assistant")
     assistant = _assistant["saveassistant"]
     if int(assistant) == 1:
-        await pytgcalls1.durdur_stream(chat_id)
+        await pytgcalls1.pause_stream(chat_id)
     elif int(assistant) == 2:
-        await pytgcalls2.durdur_stream(chat_id)
+        await pytgcalls2.pause_stream(chat_id)
     elif int(assistant) == 3:
-        await pytgcalls3.durdur_stream(chat_id)
+        await pytgcalls3.pause_stream(chat_id)
     elif int(assistant) == 4:
-        await pytgcalls4.durdur_stream(chat_id)
+        await pytgcalls4.pause_stream(chat_id)
     elif int(assistant) == 5:
-        await pytgcalls5.durdur_stream(chat_id)
+        await pytgcalls5.pause_stream(chat_id)
 
 
 ### Multi Assistant Resume
