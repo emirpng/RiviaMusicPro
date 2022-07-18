@@ -11,7 +11,7 @@ from Hero import BOT_USERNAME, MUSIC_BOT_NAME, app, db_mem
 from Hero.Core.PyTgCalls import Queues
 from Hero.Core.PyTgCalls.Converter import convert
 from Hero.Core.PyTgCalls.Downloader import download
-from Hero.Core.PyTgCalls.Hero import (join_stream, pause_stream,
+from Hero.Core.PyTgCalls.Hero import (join_stream, durdur_stream,
                                         resume_stream, skip_stream,
                                         skip_video_stream, stop_stream)
 from Hero.Database import (_get_playlists, delete_playlist, get_playlist,
@@ -68,7 +68,7 @@ async def admin_risghts(_, CallbackQuery):
                 "Müzik zaten duraklatıldı.", show_alert=True
             )
         await music_off(chat_id)
-        await pause_stream(chat_id)
+        await durdur_stream(chat_id)
         await CallbackQuery.message.reply_text(
             f"🎧 Şarkı {CallbackQuery.from_user.mention} tarafından durduruldu.",
             reply_markup=audio_markup2,
