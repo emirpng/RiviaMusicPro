@@ -54,7 +54,7 @@ __HELP__ = """
 """
 
 @app.on_message(
-    filters.command(["pause", "skip", "resume", "stop", "end", "son", "durdur", "devam", "atla"])
+    filters.command(["/durdur", "/atla", "/devam", "/bitir", "/son"])
     & filters.group
 )
 @AdminRightsCheck
