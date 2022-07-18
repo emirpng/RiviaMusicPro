@@ -13,7 +13,7 @@ from Hero import BOT_USERNAME, MUSIC_BOT_NAME, app, db_mem
 from Hero.Core.PyTgCalls import Queues
 from Hero.Core.PyTgCalls.Converter import convert
 from Hero.Core.PyTgCalls.Downloader import download
-from Hero.Core.PyTgCalls.Hero import (pause_stream, resume_stream,
+from Hero.Core.PyTgCalls.Hero import (durdur_stream, resume_stream,
                                         skip_stream, skip_video_stream,
                                         stop_stream)
 from Hero.Database import (is_active_chat, is_music_playing, music_off,
@@ -54,7 +54,7 @@ __HELP__ = """
 """
 
 @app.on_message(
-    filters.command(["pause", "devam", "son", "bitir", "atla"])
+    filters.command(["durdur", "devam", "son", "bitir", "atla"])
     & filters.group
 )
 @AdminRightsCheck
@@ -70,7 +70,7 @@ async def admins(_, message: Message):
         if not await is_music_playing(message.chat.id):
             return await message.reply_text("Müzik zaten duraklatıldı.")
         await music_off(chat_id)
-        await pause_stream(chat_id)
+        await durdur_stream(chat_id)
         await message.reply_text(
             f"🎧 Şarkı {message.from_user.mention} tarafından durduruldu."
         )
