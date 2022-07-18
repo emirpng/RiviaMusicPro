@@ -54,7 +54,7 @@ __HELP__ = """
 """
 
 @app.on_message(
-    filters.command(["dur", "atla", "devam", "bitir", "son"])
+    filters.command(["dur", "devam", "son", "bitir", "atla"])
     & filters.group
 )
 @AdminRightsCheck
