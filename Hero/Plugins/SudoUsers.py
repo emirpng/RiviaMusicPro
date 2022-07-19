@@ -18,28 +18,18 @@ from Hero.Database import (add_gban_user, add_off, add_on, add_sudo,
 
 __MODULE__ = "sᴜᴅᴏ ᴜsᴇʀs"
 __HELP__ = """
-
-
 /sudolist 
     Check the sudo user list of Bot. 
-
-
 **Note:**
 Only for Sudo Users. 
-
-
 /addsudo [Username or Reply to a user]
 - To Add A User In Bot's Sudo Users.
-
 /delsudo [Username or Reply to a user]
 - To Remove A User from Bot's Sudo Users.
-
 /maintenance [enable / disable]
 - When enabled Bot goes under maintenance mode. No one can play Music now!
-
 /logger [enable / disable]
 - When enabled Bot logs the searched queries in logger group.
-
 /clean
 - Clean Temp Files and Logs.
 """
@@ -275,7 +265,6 @@ async def ban_globally(_, message):
                     pass
             ban_text = f"""
 __**New Global Ban on {MUSIC_BOT_NAME}**__
-
 **Origin:** {message.chat.title} [`{message.chat.id}`]
 **Sudo User:** {from_user.mention}
 **Banned User:** {user.mention}
@@ -326,7 +315,6 @@ __**New Global Ban on {MUSIC_BOT_NAME}**__
                     pass
             ban_text = f"""
 __**New Global Ban on {MUSIC_BOT_NAME}**__
-
 **Origin:** {message.chat.title} [`{message.chat.id}`]
 **Sudo User:** {from_user_mention}
 **Banned User:** {mention}
