@@ -188,7 +188,7 @@ async def activevi_(_, message: Message):
         try:
             title = (await app.get_chat(x)).title
         except Exception:
-            title = "Private Group"
+            title = "Özel Grup"
         if (await app.get_chat(x)).username:
             user = (await app.get_chat(x)).username
             text += (
@@ -210,7 +210,7 @@ async def activevi_(_, message: Message):
 async def basffy(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "**ᴜsᴀɢᴇ:**\n`/asistan` [Sohbet kullanıcı adı veya id]"
+            "**Şu şekilde kullanın:**\n`/asistan` [Sohbet kullanıcı adı veya id]"
         )
         return
     chat = message.text.split(None, 2)[1]
@@ -226,7 +226,7 @@ async def basffy(_, message):
             "Önceden kaydedilmiş asistan bulunamadı.\n\nAsistanı {Chat} grubu içinde /play komutu üzerinden ayarlayabilirsiniz."
         )
     else:
-        ran_ass = _assistant["saveassistant"]
+        ran_ass = _assistant["kayitasistan"]
     ASS_ID, ASS_NAME, ASS_USERNAME, ASS_ACC = await get_assistant_details(
         ran_ass
     )
@@ -242,7 +242,7 @@ async def basffy(_, message):
 async def baaaf(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "**ᴜsᴀɢᴇ:**\n`/leavebot` [Sohbet kullanıcı adı veya id]"
+            "**Şu şekilde kullanın:**\n`/leavebot` [Sohbet kullanıcı adı veya id]"
         )
         return
     chat = message.text.split(None, 2)[1]
@@ -259,7 +259,7 @@ async def baaaf(_, message):
 async def baujaf(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "**ᴜsᴀɢᴇ:**\n`/leave` [Sohbet kullanıcı adı veya id]"
+            "**Şu şekilde kullanın:**\n`/ayril` [Sohbet kullanıcı adı veya id]"
         )
         return
     chat = message.text.split(None, 2)[1]
