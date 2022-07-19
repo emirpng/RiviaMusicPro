@@ -100,21 +100,21 @@ async def userdel(_, message: Message):
         user = await app.get_users(user)
         from_user = message.from_user
         if user.id not in SUDOERS:
-            return await message.reply_text(f"Not a part of Bot's Sudo.")
+            return await message.reply_text(f"Bot'un Sudo'sunun bir parçası değil.")
         removed = await remove_sudo(user.id)
         if removed:
             await message.reply_text(
                 f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
             )
             return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
-        await message.reply_text(f"Something wrong happened.")
+        await message.reply_text(f"Ters giden şeyler oldu.")
         return
     from_user_id = message.from_user.id
     user_id = message.reply_to_message.from_user.id
     mention = message.reply_to_message.from_user.mention
     if user_id not in SUDOERS:
         return await message.reply_text(
-            f"Not a part of {MUSIC_BOT_NAME}'s Sudo."
+            f"{MUSIC_BOT_NAME}'s Sudo'nun parçası değil."
         )
     removed = await remove_sudo(user_id)
     if removed:
@@ -122,7 +122,7 @@ async def userdel(_, message: Message):
             f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
         )
         return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
-    await message.reply_text(f"Something wrong happened.")
+    await message.reply_text(f"Ters giden şeyler oldu.")
 
 
 @app.on_message(filters.command("sudolist"))
@@ -166,7 +166,7 @@ async def sudoers_list(_, message: Message):
 )
 async def set_video_limit_kid(_, message: Message):
     if len(message.command) != 2:
-        usage = "**Usage:**\n/set_video_limit [Number of chats allowed]"
+        usage = "**Usage:**\n/set_video_limit [İzin verilen sohbet sayısı]"
         return await message.reply_text(usage)
     chat_id = message.chat.id
     state = message.text.split(None, 1)[1].strip()
@@ -174,11 +174,11 @@ async def set_video_limit_kid(_, message: Message):
         limit = int(state)
     except:
         return await message.reply_text(
-            "Please Use Numeric Numbers for Setting Limit."
+            "Lütfen Limiti Ayarlamak için Sayısal Rakamlar Kullanın."
         )
     await set_video_limit(141414, limit)
     await message.reply_text(
-        f"Video Calls Maximum Limit Defined to {limit} Chats."
+        f"Görüntülü Görüşmeler Maksimum Sınırı {limit} sohbet olarak tanımlandı."
     )
 
 
@@ -196,11 +196,11 @@ async def maintenance(_, message):
     if state == "enable":
         user_id = 1
         await add_on(user_id)
-        await message.reply_text("Enabled for Maintenance")
+        await message.reply_text("Bakım Modu Etkin")
     elif state == "disable":
         user_id = 1
         await add_off(user_id)
-        await message.reply_text("Maintenance Mode Disabled")
+        await message.reply_text("Bakım Modu Devre Dışı")
     else:
         await message.reply_text(usage)
 
@@ -212,7 +212,7 @@ async def maintenance(_, message):
 async def logger(_, message):
     if LOG_SESSION == "None":
         return await message.reply_text(
-            "No Logger Account Defined.\n\nPlease Set <code>LOG_SESSION</code> var and then try loggging."
+            "Logger hesabı tanımlanmadı..\n\nLütfen <code>LOG_SESSION</code> var ögesini ayarlayın ve ardından günlüğe kaydetmeyi deneyin."
         )
     usage = "**Usage:**\n/logger [enable|disable]"
     if len(message.command) != 2:
@@ -223,11 +223,11 @@ async def logger(_, message):
     if state == "enable":
         user_id = 5
         await add_on(user_id)
-        await message.reply_text("Enabled Logging")
+        await message.reply_text("Logging Etkin")
     elif state == "disable":
         user_id = 5
         await add_off(user_id)
-        await message.reply_text("Logging Disabled")
+        await message.reply_text("Logging Devre Dışı")
     else:
         await message.reply_text(usage)
 
