@@ -92,7 +92,7 @@ async def userdel(_, message: Message):
         removed = await remove_sudo(user.id)
         if removed:
             await message.reply_text(
-                f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
+                f"**{message.reply_to_message.from_user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
             )
         await message.reply_text(f"Something wrong happened.")
         return
