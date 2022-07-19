@@ -104,7 +104,7 @@ async def userdel(_, message: Message):
         removed = await remove_sudo(user.id)
         if removed:
             await message.reply_text(
-                f"Removed **{user.mention}** from {MUSIC_BOT_NAME}'s Sudo."
+                f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
             )
             return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         await message.reply_text(f"Something wrong happened.")
@@ -119,7 +119,7 @@ async def userdel(_, message: Message):
     removed = await remove_sudo(user_id)
     if removed:
         await message.reply_text(
-            f"Removed **{mention}** from {MUSIC_BOT_NAME}'s Sudo."
+            f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
         )
         return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     await message.reply_text(f"Something wrong happened.")
