@@ -82,6 +82,14 @@ async def admins(_, message: Message):
         await message.reply_text(
             f"🎧 Şarkı {message.from_user.mention} tarafından devam ettirildi."
         )
+    if message.command[0][1] == "s":
+        if await is_music_playing(message.chat.id):
+            return await message.reply_text("Müzik zaten durduruldu.")
+        await music_off(chat_id)
+        await pause_stream(chat_id)
+        await message.reply_text(
+            f"🎧 Şarkı {message.from_user.mention} tarafından durduruldu."
+        )
     if message.command[0][1] == "t" or message.command[0][1] == "n":
         if message.chat.id not in db_mem:
             db_mem[message.chat.id] = {}
