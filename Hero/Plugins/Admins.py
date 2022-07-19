@@ -82,7 +82,7 @@ async def admins(_, message: Message):
         await message.reply_text(
             f"🎧 ᴠᴏɪᴄᴇᴄʜᴀᴛ ʀᴇsᴜᴍᴇᴅ ʙʏ {message.from_user.mention}..."
         )
-    if message.command[0][1] == "t" or message.command[0][1] == "n":
+    if message.command[0][1] == "o" or message.command[0][1] == "i":
         if message.chat.id not in db_mem:
             db_mem[message.chat.id] = {}
         wtfbro = db_mem[message.chat.id]
@@ -97,7 +97,7 @@ async def admins(_, message: Message):
         await message.reply_text(
             f"🎧 ᴠᴏɪᴄᴇᴄʜᴀᴛ ᴇɴᴅᴇᴅ/sᴛᴏᴘᴘᴇᴅ ʙʏ {message.from_user.mention}..."
         )
-    if message.command[0][1] == "k":
+    if message.command[0][1] == "t":
         if message.chat.id not in db_mem:
             db_mem[message.chat.id] = {}
         wtfbro = db_mem[message.chat.id]
