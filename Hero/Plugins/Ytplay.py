@@ -168,7 +168,7 @@ async def play(_, message: Message):
             await message.reply_photo(
                 photo="Utils/Playlist.jpg",
                 caption=(
-                    "**Usage:** /play [Music Name or Youtube Link or Reply to Audio]\n\nIf you want to play Playlists! Select the one from Below."
+                    "**Şu şekilde kullanın:** /oynat [Şarkı ismi ya da Youtube Linki ya da ses dosyasını yanıtlayın]\n\Playlist oynatmak istiyorsanız, aşağıdan birini seçin."
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
@@ -299,7 +299,7 @@ async def popat(_, CallbackQuery):
     i, query, user_id = callback_request.split("|")
     if CallbackQuery.from_user.id != int(user_id):
         return await CallbackQuery.answer(
-            "This is not for you! Search You Own Song", show_alert=True
+            "Bu senin için değil! Lütfen kendi şarkını ara.", show_alert=True
         )
     results = YoutubeSearch(query, max_results=10).to_dict()
     if int(i) == 1:
@@ -353,7 +353,7 @@ async def slider_query_results(_, CallbackQuery):
     what, type, query, user_id = callback_request.split("|")
     if CallbackQuery.from_user.id != int(user_id):
         return await CallbackQuery.answer(
-            "Search Your Own Music. You're not allowed to use this button.",
+            "Kendi Müziğinizi Arayın. Bu düğmeyi kullanmanıza izin verilmiyor.",
             show_alert=True,
         )
     what = str(what)
@@ -363,7 +363,7 @@ async def slider_query_results(_, CallbackQuery):
             query_type = 0
         else:
             query_type = int(type + 1)
-        await CallbackQuery.answer("Getting Next Result", show_alert=True)
+        await CallbackQuery.answer("Sonraki Sonucu Alma", show_alert=True)
         (
             title,
             duration_min,
@@ -376,7 +376,7 @@ async def slider_query_results(_, CallbackQuery):
         )
         med = InputMediaPhoto(
             media=thumb,
-            caption=f"📎Şarkı: **{title}\n\n⏳Süre:** {duration_min} dakika\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
+            caption=f"📎Şarkı: **{title}\n\n⏳Süre:** {duration_min} dakika",
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
@@ -386,7 +386,7 @@ async def slider_query_results(_, CallbackQuery):
             query_type = 9
         else:
             query_type = int(type - 1)
-        await CallbackQuery.answer("Getting Previous Result", show_alert=True)
+        await CallbackQuery.answer("Önceki Sonucu Alma", show_alert=True)
         (
             title,
             duration_min,
@@ -399,7 +399,7 @@ async def slider_query_results(_, CallbackQuery):
         )
         med = InputMediaPhoto(
             media=thumb,
-            caption=f"📎Şarkı: **{title}\n\n⏳Süre:** {duration_min} dakika\n\n__[Get Additional Information About Video](https://t.me/{BOT_USERNAME}?start=info_{videoid})__",
+            caption=f"📎Şarkı: **{title}\n\n⏳Süre:** {duration_min} dakika",
         )
         return await CallbackQuery.edit_message_media(
             media=med, reply_markup=InlineKeyboardMarkup(buttons)
