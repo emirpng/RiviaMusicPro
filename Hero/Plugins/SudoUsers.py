@@ -81,7 +81,6 @@ async def userdel(_, message: Message):
             await message.reply_text(
                 "Bir kullanıcının mesajını yanıtlayın veya username/user_id verin."
             )
-            return
         user = message.text.split(None, 1)[1]
         if "@" in user:
             user = user.replace("@", "")
