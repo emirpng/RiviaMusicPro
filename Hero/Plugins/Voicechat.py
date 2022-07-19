@@ -89,7 +89,7 @@ async def timer_checkup_markup(_, CallbackQuery):
         )
 
 
-@app.on_message(filters.command("queue"))
+@app.on_message(filters.command("sira"))
 async def activevc(_, message: Message):
     global get_queue
     if await is_active_chat(message.chat.id):
@@ -98,7 +98,7 @@ async def activevc(_, message: Message):
         duration_min = db_mem[message.chat.id]["total"]
         got_queue = get_queue.get(message.chat.id)
         if not got_queue:
-            await mystic.edit(f"Sıra yok")
+            await mystic.edit(f"Sıra bulunamadı")
         fetched = []
         for get in got_queue:
             fetched.append(get)
@@ -115,12 +115,12 @@ async def activevc(_, message: Message):
         fetched.pop(0)
         if fetched:
             msg += "\n\n"
-            msg += "**Sıradakine geç:**"
+            msg += "**Sıradakiler:**\n"
             for song in fetched:
                 name = song[0][:30]
                 usr = song[1]
                 dur = song[2]
-                msg += f"\n⏸️{name}"
+                msg += f"\n⏸️ {name}"
                 msg += f"\n   ╠Süre : {dur}"
                 msg += f"\n   ╚Ekleyen : {usr}\n"
         if len(msg) > 4096:
@@ -137,10 +137,10 @@ async def activevc(_, message: Message):
         else:
             await mystic.edit(msg)
     else:
-        await message.reply_text(f"Sıra yok")
+        await message.reply_text(f"Sıra bulunamadı")
 
 
-@app.on_message(filters.command(["vc", "activevc"]) & filters.user(SUDOERS))
+@app.on_message(filters.command(["vc", "aktifvc"]) & filters.user(SUDOERS))
 async def activevc(_, message: Message):
     served_chats = []
     try:
@@ -173,7 +173,7 @@ async def activevc(_, message: Message):
         )
 
 
-@app.on_message(filters.command(["ac", "activevideo"]) & filters.user(SUDOERS))
+@app.on_message(filters.command(["ac", "aktifvc"]) & filters.user(SUDOERS))
 async def activevi_(_, message: Message):
     served_chats = []
     try:
@@ -206,11 +206,11 @@ async def activevi_(_, message: Message):
         )
 
 
-@app.on_message(filters.command(["join", "joinasistan"]) & filters.user(SUDOERS))
+@app.on_message(filters.command(["join", "asistan"]) & filters.user(SUDOERS))
 async def basffy(_, message):
     if len(message.command) != 2:
         await message.reply_text(
-            "**ᴜsᴀɢᴇ:**\n`/joinasistan` [Sohbet kullanıcı adı veya id]"
+            "**ᴜsᴀɢᴇ:**\n`/asistan` [Sohbet kullanıcı adı veya id]"
         )
         return
     chat = message.text.split(None, 2)[1]
@@ -255,7 +255,7 @@ async def baaaf(_, message):
     await message.reply_text("Bot sohbetten başarıyla ayrıldı.")
 
 
-@app.on_message(filters.command(["leave", "leaveasistan"]) & filters.user(SUDOERS))
+@app.on_message(filters.command(["leave", "ayril"]) & filters.user(SUDOERS))
 async def baujaf(_, message):
     if len(message.command) != 2:
         await message.reply_text(
@@ -275,7 +275,7 @@ async def baujaf(_, message):
             "Önceden kaydedilmiş asistan bulunamadı.\n\nAsistanı {Chat} grubu içinde /play komutu üzerinden ayarlayabilirsiniz."
         )
     else:
-        ran_ass = _assistant["saveassistant"]
+        ran_ass = _assistant["kayitasistan"]
     ASS_ID, ASS_NAME, ASS_USERNAME, ASS_ACC = await get_assistant_details(
         ran_ass
     )
