@@ -32,24 +32,18 @@ from Hero.Utilities.youtube import get_m3u8, get_yt_info_id
 loop = asyncio.get_event_loop()
 
 
-__MODULE__ = "ᴠᴏɪᴄᴇ ᴄʜᴀᴛ"
+__MODULE__ = "ᴋᴏᴍᴜᴛʟᴀʀ"
 __HELP__ = """
-`/pause`
-- ᴘᴀᴜsᴇ ᴛʜᴇ ᴘʟᴀʏɪɴɢ ᴍᴜsɪᴄ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.
-`/resume`
-- ʀᴇsᴜᴍᴇ ᴛʜᴇ ᴘᴀᴜsᴇᴅ ᴍᴜsɪᴄ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ.
-`/skip`
-- sᴋɪᴘ ᴛʜᴇ ᴄᴜʀʀᴇɴᴛ ᴘʟᴀʏɪɴɢ ᴍᴜsɪᴄ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ
-`/end` or `/stop`
-- sᴛᴏᴘ ᴛʜᴇ ᴘʟᴀʏᴏᴜᴛ.
-`/queue`
-- ᴄʜᴇᴄᴋ ǫᴜᴇᴜᴇ ʟɪsᴛ.
-**ɴᴏᴛᴇ:**
-ᴏɴʟʏ ғᴏʀ sᴜᴅᴏ ᴜsᴇʀs
-`/activevc`
-- ᴄʜᴇᴄᴋ ᴀᴄᴛɪᴠᴇ ᴠᴏɪᴄᴇ ᴄʜᴀᴛs ᴏɴ ʙᴏᴛ.
-`/activevideo`
-- ᴄʜᴇᴄᴋ ᴀᴄᴛɪᴠᴇ ᴠɪᴅᴇᴏ ᴄᴀʟʟs ᴏɴ ʙᴏᴛ.
+`/durdur`
+- Sesli sohbette oynatılan şarkıyı durdurur.
+`/devam`
+- Sesli sohbette oynatılan şarkıyı devam ettirir.
+`/atla`
+- Sesli sohbette oynatılan şarkıyı atlar.
+`/son` ya da `/bitir`
+- Oynatılan şarkıyı durdurur ve asistanı sesli sohbetten çıkarır.
+`/sira`
+- Sıra listesini kontrol edin.
 """
 
 
