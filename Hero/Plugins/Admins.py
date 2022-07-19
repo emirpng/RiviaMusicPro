@@ -54,7 +54,7 @@ __HELP__ = """
 
 
 @app.on_message(
-    filters.command(["durdur", "atla", "devam", "son", "son"])
+    filters.command(["pause", "skip", "resume", "stop", "end", "durdur", "atla", "devam", "bitir", "son"])
     & filters.group
 )
 @AdminRightsCheck
@@ -66,7 +66,7 @@ async def admins(_, message: Message):
     if not await is_active_chat(message.chat.id):
         return await message.reply_text("ɴᴏᴛʜɪɴɢ ɪs ᴘʟᴀʏɪɴɢ ᴏɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ...")
     chat_id = message.chat.id
-    if message.command[0][1] == "a":
+    if message.command[0][1] == "u":
         if not await is_music_playing(message.chat.id):
             return await message.reply_text("ᴍᴜsɪᴄ ɪs ᴀʟʀᴇᴀᴅʏ ᴘᴀᴜsᴇᴅ...")
         await music_off(chat_id)
