@@ -166,6 +166,63 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
                 ],
             ]
         )
+    elif j == 4:
+        key = InlineKeyboardMarkup(
+            [
+                [
+                    a1,
+                    a2,
+                    a3,
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="⬅️ Geri Dön",
+                        callback_data=f"good {videoid}|{user_id}",
+                    ),
+                    InlineKeyboardButton(
+                        text="🗑 Menüyü Kapat", callback_data=f"close2"
+                    ),
+                ],
+            ]
+        )
+    elif j == 5:
+        key = InlineKeyboardMarkup(
+            [
+                [
+                    a1,
+                    a2,
+                    a3,
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="⬅️ Geri Dön",
+                        callback_data=f"good {videoid}|{user_id}",
+                    ),
+                    InlineKeyboardButton(
+                        text="🗑 Menüyü Kapat", callback_data=f"close2"
+                    ),
+                ],
+            ]
+        )
+    elif j == 6:
+        key = InlineKeyboardMarkup(
+            [
+                [
+                    a1,
+                    a2,
+                    a3,
+                ],
+                [
+                    InlineKeyboardButton(
+                        text="⬅️ Geri Dön",
+                        callback_data=f"good {videoid}|{user_id}",
+                    ),
+                    InlineKeyboardButton(
+                        text="🗑 Menüyü Kapat", callback_data=f"close2"
+                    ),
+                ],
+            ]
+        )
     else:
         return await CallbackQuery.message.reply_text(
             "Video formatı bulunamadı, diğer müzikleri deneyin."
