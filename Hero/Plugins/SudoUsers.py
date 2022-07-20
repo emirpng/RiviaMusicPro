@@ -40,7 +40,6 @@ Only for Sudo Users.
 @app.on_message(
     filters.command("addsudo") & filters.user(OWNER_ID)
 )
-@language
 async def useradd(client, message: Message, _):
     if MONGO_DB_URI is None:
         return await message.reply_text(
@@ -86,7 +85,6 @@ async def useradd(client, message: Message, _):
 @app.on_message(
     filters.command("delsudo") & filters.user(OWNER_ID)
 )
-@language
 async def userdel(client, message: Message, _):
     if MONGO_DB_URI is None:
         return await message.reply_text(
@@ -120,7 +118,6 @@ async def userdel(client, message: Message, _):
 
 
 @app.on_message(filters.command("sudolist") & ~BANNED_USERS)
-@language
 async def sudoers_list(client, message: Message, _):
     text = _["sudo_5"]
     count = 0
