@@ -234,6 +234,13 @@ async def boom(_, CallbackQuery):
         print("ᴍᴇᴅ ɴᴏᴛ ғᴏᴜɴᴅ")
 
 
+def p_mark(link, channel):
+    buttons = [
+        [InlineKeyboardButton(text="deneme", url=f"{link}")],
+    ]
+    return buttons
+
+
 async def send_file(
     CallbackQuery, med, filename, videoid, user_id, link, channel
 ):
