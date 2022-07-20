@@ -44,7 +44,7 @@ async def useradd(_, message: Message):
         )
     if not message.reply_to_message:
         if len(message.command) != 2:
-            return await message.reply_text(_["bdmsndnsns"])
+            return await message.reply_text(_, f"bdmsndnsns")
         user = message.text.split(None, 1)[1]
         if "@" in user:
             user = user.replace("@", "")
