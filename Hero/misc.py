@@ -16,8 +16,6 @@ from pyrogram import filters
 import config
 from Hero.Core.mongo import pymongodb
 
-from .logging import LOGGER
-
 SUDOERS = filters.user()
 
 HAPP = None
