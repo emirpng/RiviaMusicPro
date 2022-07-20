@@ -254,7 +254,7 @@ async def send_file(
         )
         buttons = p_mark(link, channel)
         await CallbackQuery.edit_message_media(
-            media=med, reply_markup=InlineKeyboardMarkup(buttons)
+            media=med
         )
     except Exception as e:
         buttons = inl_mark(videoid, user_id)
