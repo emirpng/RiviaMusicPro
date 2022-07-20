@@ -57,7 +57,7 @@ async def useradd(_, message: Message):
             await message.reply_text(
                 f"**{user.mention}** sudo kullanıcı olarak eklendi."
             )
-            return os.execvp("python3", ["python3", "-m", "Hero"]
+            os.execvp("python3", ["python3", "-m", "Hero"]
         else:
             await message.reply_text("Hata oluştu")
         return
