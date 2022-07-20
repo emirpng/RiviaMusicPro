@@ -13,7 +13,7 @@ from youtubesearchpython import VideosSearch
 
 from Hero import MUSIC_BOT_NAME, app
 from Hero.Utilities.changers import time_to_seconds
-from Hero.Utilities.download import get_formats, get_type
+from Hero.Utilities.download import get_formats
 
 user_time = {}
 flex = {}
