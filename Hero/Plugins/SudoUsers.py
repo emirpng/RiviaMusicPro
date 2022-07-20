@@ -111,7 +111,6 @@ async def userdel(_, message: Message):
         await message.reply_text(
             f"**{user.id},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
         )
-        return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     await message.reply_text(f"Something wrong happened.")
 
 
