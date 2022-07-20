@@ -134,6 +134,8 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
             [
                 [
                     a1,
+                ],
+                [
                     a2,
                 ],
                 [
@@ -152,6 +154,8 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
             [
                 [
                     a1,
+                ],
+                [
                     a2,
                 ],
                 [
@@ -173,6 +177,8 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
             [
                 [
                     a1,
+                ],
+                [
                     a2,
                 ],
                 [
@@ -194,6 +200,8 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
             [
                 [
                     a1,
+                ],
+                [
                     a2,
                 ],
                 [
@@ -215,6 +223,8 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
             [
                 [
                     a1,
+                ],
+                [
                     a2,
                 ],
                 [
