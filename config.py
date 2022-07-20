@@ -65,3 +65,18 @@ if str(getenv("LOG_SESSION")).strip() == "":
     LOG_SESSION = str(None)
 else:
     LOG_SESSION = str(getenv("LOG_SESSION"))
+
+
+
+
+BANNED_USERS = filters.user()
+YTDOWNLOADER = 1
+LOG = 2
+LOG_FILE_NAME = "Yukkilogs.txt"
+adminlist = {}
+lyrical = {}
+chatstats = {}
+userstats = {}
+clean = {}
+
+autoclean = []
