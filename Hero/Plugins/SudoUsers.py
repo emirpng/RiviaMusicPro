@@ -117,37 +117,32 @@ async def userdel(client, message: Message, _):
 
 
 @app.on_message(filters.command("sudolist"))
-async def sudoers_list(client, message: Message, _):
-    text = _["dbjsndnd"]
-    count = 0
+async def sudoers_list(_, message: Message):
+    sudoers = await get_sudoers()
+    text = "⭐️<u> **Owners:**</u>\n"
+    sex = 0
     for x in OWNER_ID:
         try:
             user = await app.get_users(x)
-            user = (
-                user.first_name if not user.mention else user.mention
-            )
-            count += 1
+            user = user.first_name if not user.mention else user.mention
+            sex += 1
         except Exception:
             continue
-        text += f"{count}➤ {user}\n"
+        text += f"{sex}➤ {user}\n"
     smex = 0
-    for user_id in SUDOERS:
+    for count, user_id in enumerate(sudoers, 1):
         if user_id not in OWNER_ID:
             try:
                 user = await app.get_users(user_id)
-                user = (
-                    user.first_name
-                    if not user.mention
-                    else user.mention
-                )
+                user = user.first_name if not user.mention else user.mention
                 if smex == 0:
                     smex += 1
-                    text += _["hdksndns"]
-                count += 1
-                text += f"{count}➤ {user}\n"
+                    text += "\n⭐️<u> **Sudo Users:**</u>\n"
+                sex += 1
+                text += f"{sex}➤ {user}\n"
             except Exception:
                 continue
     if not text:
-        await message.reply_text(_["dbksndnd"])
+        await message.reply_text("No Sudo Users")
     else:
         await message.reply_text(text)
