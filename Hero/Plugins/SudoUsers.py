@@ -57,7 +57,7 @@ async def useradd(_, message: Message):
             await message.reply_text(
                 f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
             )
-            os.system("python3", ["python3", "-m", "Hero")
+            os.system("python3", ["python3", "-m", "Hero"])
         else:
             await message.reply_text("Hata oluştu")
         return
@@ -70,7 +70,7 @@ async def useradd(_, message: Message):
         await message.reply_text(
             f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
         )
-        os.system("python3", ["python3", "-m", "Hero")
+        os.system("python3", ["python3", "-m", "Hero"])
     else:
         await message.reply_text("Failed")
     return
@@ -96,7 +96,7 @@ async def userdel(_, message: Message):
             await message.reply_text(
                 f"**{message.reply_to_message.from_user.mention}** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
             )
-            return os.system("python3", ["python3", "-m", "Hero")
+            return os.system("python3", ["python3", "-m", "Hero"])
         await message.reply_text(f"Something wrong happened.")
         return
     from_user_id = message.from_user.id
