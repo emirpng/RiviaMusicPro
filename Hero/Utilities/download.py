@@ -53,33 +53,19 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
                 j += 1
                 if j == 1:
                     a1 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
+                        text=f"Low Kalite Ses == {humanbytes(x['filesize'])}",
                         callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
                     )
                 if j == 2:
                     a2 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
+                        text=f"Medium Kalite Ses == {humanbytes(x['filesize'])}",
                         callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
                     )
                 if j == 3:
                     a3 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
+                        text=f"High Kalite Ses == {humanbytes(x['filesize'])}",
                         callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
-                    )
-                if j == 4:
-                    a4 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
-                    )
-                if j == 5:
-                    a5 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
-                    )
-                if j == 6:
-                    a6 = InlineKeyboardButton(
-                        text=f"Ses 🎵 {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
+
                     )
         elif type == "video":
             if str(133) in check:
@@ -167,8 +153,6 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
                 [
                     a1,
                     a2,
-                ],
-                [
                     a3,
                 ],
                 [
