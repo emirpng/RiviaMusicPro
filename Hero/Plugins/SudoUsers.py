@@ -57,7 +57,7 @@ async def useradd(_, message: Message):
             await message.reply_text(
                 f"**{user.mention}** sudo kullanıcı olarak eklendi."
             )
-            os.system(f"kill -9 {os.getpid()}")
+            os.system(f"kill -9 {os.getpid()} && bash start")
         else:
             await message.reply_text("Hata oluştu")
         return
@@ -70,7 +70,7 @@ async def useradd(_, message: Message):
         await message.reply_text(
             f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
         )
-        os.system(f"kill -9 {os.getpid()})
+        os.system(f"kill -9 {os.getpid()}")
     else:
         await message.reply_text("Failed")
     return
