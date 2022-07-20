@@ -234,10 +234,6 @@ async def boom(_, CallbackQuery):
         print("ᴍᴇᴅ ɴᴏᴛ ғᴏᴜɴᴅ")
 
 
-def p_mark(link, channel):
-    buttons = [
-        [InlineKeyboardButton(text="ᴡᴀᴛᴄʜ ᴏɴ ʏᴏᴜᴛᴜʙᴇ", url=f"{link}")],
-    ]
     return buttons
 
 
