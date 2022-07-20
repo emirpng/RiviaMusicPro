@@ -1,280 +1,555 @@
 import asyncio
 import os
-import random
-from asyncio import QueueEmpty
+import shutil
+import subprocess
+from sys import version as pyver
 
-from pyrogram import filters
-from pyrogram.types import (CallbackQuery, InlineKeyboardButton,
-                            InlineKeyboardMarkup, KeyboardButton, Message,
-                            ReplyKeyboardMarkup, ReplyKeyboardRemove)
+from pyrogram import Client, filters
+from pyrogram.errors import FloodWait
+from pyrogram.types import Message
 
-from config import get_queue
-from Hero import BOT_USERNAME, MUSIC_BOT_NAME, app, db_mem
-from Hero.Core.PyTgCalls import Queues
-from Hero.Core.PyTgCalls.Converter import convert
-from Hero.Core.PyTgCalls.Downloader import download
-from Hero.Core.PyTgCalls.Hero import (pause_stream, resume_stream,
-                                        skip_stream, skip_video_stream,
-                                        stop_stream)
-from Hero.Database import (is_active_chat, is_music_playing, music_off,
-                            music_on, remove_active_chat,
-                            remove_active_video_chat)
-from Hero.Decorators.admins import AdminRightsCheck
-from Hero.Decorators.checker import checker, checkerCB
-from Hero.Inline import audio_markup, primary_markup, secondary_markup2
-from Hero.Utilities.changers import time_to_seconds
-from Hero.Utilities.chat import specialfont_to_normal
-from Hero.Utilities.theme import check_theme
-from Hero.Utilities.thumbnails import gen_thumb
-from Hero.Utilities.timer import start_timer
-from Hero.Utilities.youtube import get_m3u8, get_yt_info_id
+from config import LOG_SESSION, OWNER_ID
+from Hero import BOT_ID, BOT_USERNAME, MUSIC_BOT_NAME, OWNER_ID, SUDOERS, app
+from Hero.Database import (add_gban_user, add_off, add_on, add_sudo,
+                            get_active_chats, get_served_chats, get_sudoers,
+                            is_gbanned_user, remove_active_chat,
+                            remove_gban_user, remove_served_chat, remove_sudo,
+                            set_video_limit)
 
-loop = asyncio.get_event_loop()
-
-
-__MODULE__ = "ᴋᴏᴍᴜᴛʟᴀʀ"
+__MODULE__ = "sᴜᴅᴏ ᴜsᴇʀs"
 __HELP__ = """
-`/durdur`
-- Sesli sohbette oynatılan şarkıyı durdurur.
-`/devam`
-- Sesli sohbette oynatılan şarkıyı devam ettirir.
-`/atla`
-- Sesli sohbette oynatılan şarkıyı atlar.
-`/son` ya da `/bitir`
-- Oynatılan şarkıyı durdurur ve asistanı sesli sohbetten çıkarır.
-`/sira`
-- Sıra listesini kontrol edin.
+/sudolist 
+    Check the sudo user list of Bot. 
+**Note:**
+Only for Sudo Users. 
+/addsudo [Username or Reply to a user]
+- To Add A User In Bot's Sudo Users.
+/delsudo [Username or Reply to a user]
+- To Remove A User from Bot's Sudo Users.
+/maintenance [enable / disable]
+- When enabled Bot goes under maintenance mode. No one can play Music now!
+/logger [enable / disable]
+- When enabled Bot logs the searched queries in logger group.
+/clean
+- Clean Temp Files and Logs.
 """
+# Add Sudo Users!
+
+
+@app.on_message(filters.command("addsudo") & filters.user(OWNER_ID))
+async def useradd(_, message: Message):
+    if not message.reply_to_message:
+        if len(message.command) != 2:
+            await message.reply_text(
+                "Bir kullanıcının mesajını yanıtlayın veya username/user_id verin."
+            )
+            return
+        user = message.text.split(None, 1)[1]
+        if "@" in user:
+            user = user.replace("@", "")
+        user = await app.get_users(user)
+        if user.id in SUDOERS:
+            return await message.reply_text(
+                f"{user.mention} zaten bir sudo kullanıcısı."
+            )
+        added = await add_sudo(user.id)
+        if added:
+            await message.reply_text(
+                f"**{user.mention}** sudo kullanıcı olarak eklendi."
+            )
+            os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
+        else:
+            await message.reply_text("Hata oluştu")
+        return
+    if message.reply_to_message.from_user.id in SUDOERS:
+        return await message.reply_text(
+            f"{message.reply_to_message.from_user.mention} zaten bir sudo kullanıcısı."
+        )
+    added = await add_sudo(message.reply_to_message.from_user.id)
+    if added:
+        await message.reply_text(
+            f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
+        )
+        os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
+    else:
+        await message.reply_text("Failed")
+    return
+
+
+@app.on_message(filters.command("delsudo") & filters.user(OWNER_ID))
+async def userdel(_, message: Message):
+    if not message.reply_to_message:
+        if len(message.command) != 2:
+            await message.reply_text(
+                "Bir kullanıcının mesajını yanıtlayın veya username/user_id verin."
+            )
+            return
+        user = message.text.split(None, 1)[1]
+        if "@" in user:
+            user = user.replace("@", "")
+        user = await app.get_users(user)
+        from_user = message.from_user
+        if user.id not in SUDOERS:
+            return await message.reply_text(f"Not a part of Bot's Sudo.")
+        removed = await remove_sudo(user.id)
+        if removed:
+            await message.reply_text(
+                f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
+            )
+            return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
+        await message.reply_text(f"Something wrong happened.")
+        return
+    from_user_id = message.from_user.id
+    user_id = message.reply_to_message.from_user.id
+    mention = message.reply_to_message.from_user.mention
+    if user_id not in SUDOERS:
+        return await message.reply_text(
+            f"Not a part of {MUSIC_BOT_NAME}'s Sudo."
+        )
+    removed = await remove_sudo(user_id)
+    if removed:
+        await message.reply_text(
+            f"**{user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
+        )
+        return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
+    await message.reply_text(f"Something wrong happened.")
+
+
+@app.on_message(filters.command("sudolist"))
+async def sudoers_list(_, message: Message):
+    sudoers = await get_sudoers()
+    text = "⭐️<u> **Owners:**</u>\n"
+    sex = 0
+    for x in OWNER_ID:
+        try:
+            user = await app.get_users(x)
+            user = user.first_name if not user.mention else user.mention
+            sex += 1
+        except Exception:
+            continue
+        text += f"{sex}➤ {user}\n"
+    smex = 0
+    for count, user_id in enumerate(sudoers, 1):
+        if user_id not in OWNER_ID:
+            try:
+                user = await app.get_users(user_id)
+                user = user.first_name if not user.mention else user.mention
+                if smex == 0:
+                    smex += 1
+                    text += "\n⭐️<u> **Sudo Users:**</u>\n"
+                sex += 1
+                text += f"{sex}➤ {user}\n"
+            except Exception:
+                continue
+    if not text:
+        await message.reply_text("No Sudo Users")
+    else:
+        await message.reply_text(text)
+
+
+### Video Limit
+
 
 @app.on_message(
-    filters.command(["durdur", "atla", "devam", "son", "bitir"])
-    & filters.group
+    filters.command(["set_video_limit", f"set_video_limit@{BOT_USERNAME}"])
+    & filters.user(SUDOERS)
 )
-@AdminRightsCheck
-@checker
-async def admins(_, message: Message):
-    global get_queue
-    if not len(message.command) == 1:
-        return await message.reply_text("Komutların yanlış kullanımı hatası..")
-    if not await is_active_chat(message.chat.id):
-        return await message.reply_text("Sesli sohbette hiçbir şey çalmıyor...")
+async def set_video_limit_kid(_, message: Message):
+    if len(message.command) != 2:
+        usage = "**Usage:**\n/set_video_limit [Number of chats allowed]"
+        return await message.reply_text(usage)
     chat_id = message.chat.id
-    if message.command[0][1] == "a":
-        if not await is_music_playing(message.chat.id):
-            return await message.reply_text("Müzik zaten duraklatıldı.")
-        await music_off(chat_id)
-        await pause_stream(chat_id)
-        await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından durduruldu."
+    state = message.text.split(None, 1)[1].strip()
+    try:
+        limit = int(state)
+    except:
+        return await message.reply_text(
+            "Please Use Numeric Numbers for Setting Limit."
         )
-    if message.command[0][1] == "e":
-        if await is_music_playing(message.chat.id):
-            return await message.reply_text("Müzik zaten oynatılıyor.")
-        await music_on(chat_id)
-        await resume_stream(chat_id)
-        await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından devam ettirildi."
+    await set_video_limit(141414, limit)
+    await message.reply_text(
+        f"Video Calls Maximum Limit Defined to {limit} Chats."
+    )
+
+
+## Maintenance Yukki
+
+
+@app.on_message(filters.command("maintenance") & filters.user(SUDOERS))
+async def maintenance(_, message):
+    usage = "**Usage:**\n/maintenance [enable|disable]"
+    if len(message.command) != 2:
+        return await message.reply_text(usage)
+    chat_id = message.chat.id
+    state = message.text.split(None, 1)[1].strip()
+    state = state.lower()
+    if state == "enable":
+        user_id = 1
+        await add_on(user_id)
+        await message.reply_text("Enabled for Maintenance")
+    elif state == "disable":
+        user_id = 1
+        await add_off(user_id)
+        await message.reply_text("Maintenance Mode Disabled")
+    else:
+        await message.reply_text(usage)
+
+
+## Logger
+
+
+@app.on_message(filters.command("logger") & filters.user(SUDOERS))
+async def logger(_, message):
+    if LOG_SESSION == "None":
+        return await message.reply_text(
+            "No Logger Account Defined.\n\nPlease Set <code>LOG_SESSION</code> var and then try loggging."
         )
-    if message.command[0][1] == "t" or message.command[0][1] == "n":
-        if message.chat.id not in db_mem:
-            db_mem[message.chat.id] = {}
-        wtfbro = db_mem[message.chat.id]
-        wtfbro["live_check"] = False
-        try:
-            Queues.clear(message.chat.id)
-        except QueueEmpty:
-            pass
-        await remove_active_chat(chat_id)
-        await remove_active_video_chat(chat_id)
-        await stop_stream(chat_id)
-        await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından sonlandırıldı. Asistan sohbetten ayrıldı."
-        )
-    if message.command[0][1] == "k":
-        if message.chat.id not in db_mem:
-            db_mem[message.chat.id] = {}
-        wtfbro = db_mem[message.chat.id]
-        wtfbro["live_check"] = False
-        Queues.task_done(chat_id)
-        if Queues.is_empty(chat_id):
-            await remove_active_chat(chat_id)
-            await remove_active_video_chat(chat_id)
-            await message.reply_text(
-                "Sırada daha fazla müzik yok \n\nAsistan sesli sohbetten ayrıldı."
-            )
-            await stop_stream(chat_id)
+    usage = "**Usage:**\n/logger [enable|disable]"
+    if len(message.command) != 2:
+        return await message.reply_text(usage)
+    chat_id = message.chat.id
+    state = message.text.split(None, 1)[1].strip()
+    state = state.lower()
+    if state == "enable":
+        user_id = 5
+        await add_on(user_id)
+        await message.reply_text("Enabled Logging")
+    elif state == "disable":
+        user_id = 5
+        await add_off(user_id)
+        await message.reply_text("Logging Disabled")
+    else:
+        await message.reply_text(usage)
+
+
+## Gban Module
+
+
+@app.on_message(filters.command("gban") & filters.user(SUDOERS))
+async def ban_globally(_, message):
+    if not message.reply_to_message:
+        if len(message.command) < 2:
+            await message.reply_text("**Usage:**\n/gban [USERNAME | USER_ID]")
             return
+        user = message.text.split(None, 2)[1]
+        if "@" in user:
+            user = user.replace("@", "")
+        user = await app.get_users(user)
+        from_user = message.from_user
+        if user.id == from_user.id:
+            return await message.reply_text(
+                "You want to gban yourself? How Fool!"
+            )
+        elif user.id == BOT_ID:
+            await message.reply_text("Should i block myself? Lmao Ded!")
+        elif user.id in SUDOERS:
+            await message.reply_text("You want to block a sudo user? KIDXZ")
         else:
-            videoid = Queues.get(chat_id)["file"]
-            got_queue = get_queue.get(chat_id)
-            if got_queue:
-                got_queue.pop(0)
-            finxx = f"{videoid[0]}{videoid[1]}{videoid[2]}"
-            aud = 0
-            if str(finxx) == "raw":
-                await skip_stream(chat_id, videoid)
-                afk = videoid
-                title = db_mem[videoid]["title"]
-                duration_min = db_mem[videoid]["duration"]
-                duration_sec = int(time_to_seconds(duration_min))
-                mention = db_mem[videoid]["username"]
-                videoid = db_mem[videoid]["videoid"]
-                if str(videoid) == "smex1":
-                    buttons = buttons = audio_markup(
-                        videoid,
-                        message.from_user.id,
-                        duration_min,
-                        duration_min,
-                    )
-                    thumb = "Utils/Telegram.JPEG"
-                    aud = 1
-                else:
-                    _path_ = _path_ = (
-                        (str(afk))
-                        .replace("_", "", 1)
-                        .replace("/", "", 1)
-                        .replace(".", "", 1)
-                    )
-                    thumb = f"cache/{_path_}final.png"
-                    buttons = primary_markup(
-                        videoid,
-                        message.from_user.id,
-                        duration_min,
-                        duration_min,
-                    )
-                final_output = await message.reply_photo(
-                    photo=thumb,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=f"<b>Şarkı Atlatıldı</b>\n\n🎥<b>Şarkı:</b> {title} \n⏳<b>Süre:</b> {duration_min} \n👤<b>Oynatan: </b> {mention}",
-                )
-                await start_timer(
-                    videoid,
-                    duration_min,
-                    duration_sec,
-                    final_output,
-                    message.chat.id,
-                    message.from_user.id,
-                    aud,
-                )
-            elif str(finxx) == "s1s":
-                mystic = await message.reply_text(
-                    "Atlandı.. Sonraki Video Akışına geçiliyor."
-                )
-                afk = videoid
-                read = (str(videoid)).replace("s1s_", "", 1)
-                s = read.split("_+_")
-                quality = s[0]
-                videoid = s[1]
-                if int(quality) == 1080:
-                    try:
-                        await skip_video_stream(chat_id, videoid, 720, mystic)
-                    except Exception as e:
-                        return await mystic.edit(
-                            f"Video akışı değiştirilirken hata oluştu....\n\Olası hata:- {e}"
-                        )
-                    buttons = secondary_markup2("Smex1", message.from_user.id)
-                    mention = db_mem[afk]["username"]
-                    await mystic.delete()
-                    final_output = await message.reply_photo(
-                        photo="Utils/Telegram.JPEG",
-                        reply_markup=InlineKeyboardMarkup(buttons),
-                        caption=(
-                            f"<b>Şarkı Atlatıldı</b>\n\n👤**Oynatan:** {mention}"
-                        ),
-                    )
-                    await mystic.delete()
-                else:
-                    (
-                        title,
-                        duration_min,
-                        duration_sec,
-                        thumbnail,
-                    ) = get_yt_info_id(videoid)
-                    nrs, ytlink = await get_m3u8(videoid)
-                    if nrs == 0:
-                        return await mystic.edit(
-                            "Video biçimleri getirilemedi.",
-                        )
-                    try:
-                        await skip_video_stream(
-                            chat_id, ytlink, quality, mystic
-                        )
-                    except Exception as e:
-                        return await mystic.edit(
-                            f"Video akışı değiştirilirken hata oluştu..\n\Olası hata:- {e}"
-                        )
-                    theme = await check_theme(chat_id)
-                    c_title = message.chat.title
-                    user_id = db_mem[afk]["user_id"]
-                    chat_title = await specialfont_to_normal(c_title)
-                    thumb = await gen_thumb(
-                        thumbnail, title, user_id, theme, chat_title
-                    )
-                    buttons = primary_markup(
-                        videoid, user_id, duration_min, duration_min
-                    )
-                    mention = db_mem[afk]["username"]
-                    await mystic.delete()
-                    final_output = await message.reply_photo(
-                        photo=thumb,
-                        reply_markup=InlineKeyboardMarkup(buttons),
-                        caption=(
-                            f"<b>Şarkı Atlatıldı</b>\n\n🎥<b>Şarkı: </b> [{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n👤**Oynatan:** {mention}"
-                        ),
-                    )
-                    await mystic.delete()
-                    os.remove(thumb)
-                    await start_timer(
-                        videoid,
-                        duration_min,
-                        duration_sec,
-                        final_output,
-                        message.chat.id,
-                        message.from_user.id,
-                        aud,
-                    )
+            await add_gban_user(user.id)
+            served_chats = []
+            chats = await get_served_chats()
+            for chat in chats:
+                served_chats.append(int(chat["chat_id"]))
+            m = await message.reply_text(
+                f"**Initializing Global Ban on {user.mention}**\n\nExpected Time : {len(served_chats)}"
+            )
+            number_of_chats = 0
+            for sex in served_chats:
+                try:
+                    await app.ban_chat_member(sex, user.id)
+                    number_of_chats += 1
+                    await asyncio.sleep(1)
+                except FloodWait as e:
+                    await asyncio.sleep(int(e.x))
+                except Exception:
+                    pass
+            ban_text = f"""
+__**New Global Ban on {MUSIC_BOT_NAME}**__
+**Origin:** {message.chat.title} [`{message.chat.id}`]
+**Sudo User:** {from_user.mention}
+**Banned User:** {user.mention}
+**Banned User ID:** `{user.id}`
+**Chats:** {number_of_chats}"""
+            try:
+                await m.delete()
+            except Exception:
+                pass
+            await message.reply_text(
+                f"{ban_text}",
+                disable_web_page_preview=True,
+            )
+        return
+    from_user_id = message.from_user.id
+    from_user_mention = message.from_user.mention
+    user_id = message.reply_to_message.from_user.id
+    mention = message.reply_to_message.from_user.mention
+    sudoers = await get_sudoers()
+    if user_id == from_user_id:
+        await message.reply_text("You want to block yourself? How Fool!")
+    elif user_id == BOT_ID:
+        await message.reply_text("Should i block myself? Lmao Ded!")
+    elif user_id in sudoers:
+        await message.reply_text("You want to block a sudo user? KIDXZ")
+    else:
+        is_gbanned = await is_gbanned_user(user_id)
+        if is_gbanned:
+            await message.reply_text("Zaten Yasaklanmış")
+        else:
+            await add_gban_user(user_id)
+            served_chats = []
+            chats = await get_served_chats()
+            for chat in chats:
+                served_chats.append(int(chat["chat_id"]))
+            m = await message.reply_text(
+                f"**Küresel Yasak Başlatılıyor {mention}**\n\nBeklenilen Süre : {len(served_chats)}"
+            )
+            number_of_chats = 0
+            for sex in served_chats:
+                try:
+                    await app.ban_chat_member(sex, user_id)
+                    number_of_chats += 1
+                    await asyncio.sleep(1)
+                except FloodWait as e:
+                    await asyncio.sleep(int(e.x))
+                except Exception:
+                    pass
+            ban_text = f"""
+__**Yeni Küresel Yasak {MUSIC_BOT_NAME}**__
+**Origin:** {message.chat.title} [`{message.chat.id}`]
+**Sudo User:** {from_user_mention}
+**Banned User:** {mention}
+**Banned User ID:** `{user_id}`
+**Chats:** {number_of_chats}"""
+            try:
+                await m.delete()
+            except Exception:
+                pass
+            await message.reply_text(
+                f"{ban_text}",
+                disable_web_page_preview=True,
+            )
+            return
+
+
+@app.on_message(filters.command("ungban") & filters.user(SUDOERS))
+async def unban_globally(_, message):
+    if not message.reply_to_message:
+        if len(message.command) != 2:
+            await message.reply_text(
+                "**Şu şekilde kullanın:**\n/ungban [USERNAME | USER_ID]"
+            )
+            return
+        user = message.text.split(None, 1)[1]
+        if "@" in user:
+            user = user.replace("@", "")
+        user = await app.get_users(user)
+        from_user = message.from_user
+        sudoers = await get_sudoers()
+        if user.id == from_user.id:
+            await message.reply_text("Engeli kaldırmak mı istiyorsunuz?")
+        elif user.id == BOT_ID:
+            await message.reply_text("Should i unblock myself?")
+        elif user.id in sudoers:
+            await message.reply_text("Sudo kullanıcıları engellenemez/engel kaldırılamaz.")
+        else:
+            is_gbanned = await is_gbanned_user(user.id)
+            if not is_gbanned:
+                await message.reply_text("He's already free, why bully him?")
             else:
-                mystic = await message.reply_text(
-                    f"**{MUSIC_BOT_NAME} ᴘʟᴀʏʟɪsᴛ ғᴜɴᴄᴛɪᴏɴ...**\n\n__ᴅᴏᴡɴʟᴏᴀᴅɪɴɢ ɴᴇxᴛ ᴍᴜsɪᴄ ғʀᴏᴍ ᴘʟᴀʏʟɪsᴛ...__"
-                )
-                (
-                    title,
-                    duration_min,
-                    duration_sec,
-                    thumbnail,
-                ) = get_yt_info_id(videoid)
-                await mystic.edit(
-                    f"**{MUSIC_BOT_NAME} İndirici**\n**Şarkı:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
-                )
-                downloaded_file = await loop.run_in_executor(
-                    None, download, videoid, mystic, title
-                )
-                raw_path = await convert(downloaded_file)
-                await skip_stream(chat_id, raw_path)
-                theme = await check_theme(chat_id)
-                chat_title = await specialfont_to_normal(message.chat.title)
-                thumb = await gen_thumb(
-                    thumbnail, title, message.from_user.id, theme, chat_title
-                )
-                buttons = primary_markup(
-                    videoid, message.from_user.id, duration_min, duration_min
-                )
-                await mystic.delete()
-                mention = db_mem[videoid]["username"]
-                final_output = await message.reply_photo(
-                    photo=thumb,
-                    reply_markup=InlineKeyboardMarkup(buttons),
-                    caption=(
-                        f"<b>Şarkı Atlatıldı</b>\n\n🎥<b>Şarkı: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>Süre:</b> {duration_min} dakika\n👤**Oynatan:** {mention}"
-                    ),
-                )
-                os.remove(thumb)
-                await start_timer(
-                    videoid,
-                    duration_min,
-                    duration_sec,
-                    final_output,
-                    message.chat.id,
-                    message.from_user.id,
-                    aud,
-                )
+                await remove_gban_user(user.id)
+                await message.reply_text(f"Yasak kaldırıldı!")
+        return
+    from_user_id = message.from_user.id
+    user_id = message.reply_to_message.from_user.id
+    mention = message.reply_to_message.from_user.mention
+    sudoers = await get_sudoers()
+    if user_id == from_user_id:
+        await message.reply_text("Engeli kaldırmak mı istiyorsunuz?")
+    elif user_id == BOT_ID:
+        await message.reply_text(
+            "Should i unblock myself? But i'm not blocked."
+        )
+    elif user_id in sudoers:
+        await message.reply_text("Sudo kullanıcıları engellenemez/engel kaldırılamaz.")
+    else:
+        is_gbanned = await is_gbanned_user(user_id)
+        if not is_gbanned:
+            await message.reply_text("He's already free, why bully him?")
+        else:
+            await remove_gban_user(user_id)
+            await message.reply_text(f"Yasak kaldırıldı!")
+
+
+# Broadcast Message
+
+
+@app.on_message(filters.command("broadcast_pin") & filters.user(SUDOERS))
+async def broadcast_message_pin_silent(_, message):
+    if not message.reply_to_message:
+        pass
+    else:
+        x = message.reply_to_message.message_id
+        y = message.chat.id
+        sent = 0
+        pin = 0
+        chats = []
+        schats = await get_served_chats()
+        for chat in schats:
+            chats.append(int(chat["chat_id"]))
+        for i in chats:
+            try:
+                m = await app.forward_messages(i, y, x)
+                try:
+                    await m.pin(disable_notification=True)
+                    pin += 1
+                except Exception:
+                    pass
+                await asyncio.sleep(0.3)
+                sent += 1
+            except Exception:
+                pass
+        await message.reply_text(
+            f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+        )
+        return
+    if len(message.command) < 2:
+        await message.reply_text(
+            "**Usage**:\n/broadcast [MESSAGE] or [Reply to a Message]"
+        )
+        return
+    text = message.text.split(None, 1)[1]
+    sent = 0
+    pin = 0
+    chats = []
+    schats = await get_served_chats()
+    for chat in schats:
+        chats.append(int(chat["chat_id"]))
+    for i in chats:
+        try:
+            m = await app.send_message(i, text=text)
+            try:
+                await m.pin(disable_notification=True)
+                pin += 1
+            except Exception:
+                pass
+            await asyncio.sleep(0.3)
+            sent += 1
+        except Exception:
+            pass
+    await message.reply_text(
+        f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+    )
+
+
+@app.on_message(filters.command("broadcast_pin_loud") & filters.user(SUDOERS))
+async def broadcast_message_pin_loud(_, message):
+    if not message.reply_to_message:
+        pass
+    else:
+        x = message.reply_to_message.message_id
+        y = message.chat.id
+        sent = 0
+        pin = 0
+        chats = []
+        schats = await get_served_chats()
+        for chat in schats:
+            chats.append(int(chat["chat_id"]))
+        for i in chats:
+            try:
+                m = await app.forward_messages(i, y, x)
+                try:
+                    await m.pin(disable_notification=False)
+                    pin += 1
+                except Exception:
+                    pass
+                await asyncio.sleep(0.3)
+                sent += 1
+            except Exception:
+                pass
+        await message.reply_text(
+            f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+        )
+        return
+    if len(message.command) < 2:
+        await message.reply_text(
+            "**Usage**:\n/broadcast [MESSAGE] or [Reply to a Message]"
+        )
+        return
+    text = message.text.split(None, 1)[1]
+    sent = 0
+    pin = 0
+    chats = []
+    schats = await get_served_chats()
+    for chat in schats:
+        chats.append(int(chat["chat_id"]))
+    for i in chats:
+        try:
+            m = await app.send_message(i, text=text)
+            try:
+                await m.pin(disable_notification=False)
+                pin += 1
+            except Exception:
+                pass
+            await asyncio.sleep(0.3)
+            sent += 1
+        except Exception:
+            pass
+    await message.reply_text(
+        f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+    )
+
+
+@app.on_message(filters.command("broadcast") & filters.user(SUDOERS))
+async def broadcast(_, message):
+    if not message.reply_to_message:
+        pass
+    else:
+        x = message.reply_to_message.message_id
+        y = message.chat.id
+        sent = 0
+        chats = []
+        schats = await get_served_chats()
+        for chat in schats:
+            chats.append(int(chat["chat_id"]))
+        for i in chats:
+            try:
+                m = await app.forward_messages(i, y, x)
+                await asyncio.sleep(0.3)
+                sent += 1
+            except Exception:
+                pass
+        await message.reply_text(f"**Broadcasted Message In {sent} Chats.**")
+        return
+    if len(message.command) < 2:
+        await message.reply_text(
+            "**Usage**:\n/broadcast [MESSAGE] or [Reply to a Message]"
+        )
+        return
+    text = message.text.split(None, 1)[1]
+    sent = 0
+    chats = []
+    schats = await get_served_chats()
+    for chat in schats:
+        chats.append(int(chat["chat_id"]))
+    for i in chats:
+        try:
+            m = await app.send_message(i, text=text)
+            await asyncio.sleep(0.3)
+            sent += 1
+        except Exception:
+            pass
+    await message.reply_text(f"**Broadcasted Message In {sent} Chats.**")
+
+
+# Clean
+
+
+@app.on_message(filters.command("clean") & filters.user(SUDOERS))
+async def clean(_, message):
+    dir = "downloads"
+    dir1 = "cache"
+    shutil.rmtree(dir)
+    shutil.rmtree(dir1)
+    os.mkdir(dir)
+    os.mkdir(dir1)
+    await message.reply_text("Successfully cleaned all **temp** dir(s)!")
