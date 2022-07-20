@@ -253,7 +253,9 @@ async def send_file(
             chat_id=CallbackQuery.message.chat.id, action="upload_document"
         )
         buttons = p_mark(link, channel)
-        await CallbackQuery.edit_message_media()
+        await CallbackQuery.edit_message_media(
+            media=med, reply_markup=InlineKeyboardMarkup(buttons)
+        )
     except Exception as e:
         buttons = inl_mark(videoid, user_id)
         await CallbackQuery.edit_message_reply_markup(
