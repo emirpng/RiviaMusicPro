@@ -8,7 +8,7 @@ from pyrogram import Client, filters
 from pyrogram.errors import FloodWait
 from pyrogram.types import Message
 
-from config import LOG_SESSION, OWNER_ID
+from config import BANNED_USERS, MONGO_DB_URI, OWNER_ID, LOG_SESSION
 from Hero import BOT_ID, BOT_USERNAME, MUSIC_BOT_NAME, OWNER_ID, SUDOERS, app
 from Hero.Database import (add_gban_user, add_off, add_on, add_sudo,
                             get_active_chats, get_served_chats, get_sudoers,
@@ -57,7 +57,6 @@ async def useradd(_, message: Message):
             await message.reply_text(
                 f"**{user.mention}** sudo kullanıcı olarak eklendi."
             )
-            os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         else:
             await message.reply_text("Hata oluştu")
         return
@@ -70,7 +69,6 @@ async def useradd(_, message: Message):
         await message.reply_text(
             f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
         )
-        os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     else:
         await message.reply_text("Failed")
     return
@@ -96,7 +94,6 @@ async def userdel(_, message: Message):
             await message.reply_text(
                 f"**{user.id},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
             )
-            return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         await message.reply_text(f"Something wrong happened.")
         return
     from_user_id = message.from_user.id
@@ -111,7 +108,6 @@ async def userdel(_, message: Message):
         await message.reply_text(
             f"**{user.id},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
         )
-        return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     await message.reply_text(f"Something wrong happened.")
 
 
