@@ -57,7 +57,7 @@ async def useradd(_, message: Message):
             await message.reply_text(
                 f"Ditambahkan **{user.mention}** Sebagai Pengguna sudo"
             )
-            return os.execvp("python3", ["python3", "-m", "Music"])
+            return os.execvp("python3", ["python3", "-m", "Hero"])
         await edit_or_reply(message, text="Terjadi kesalahan, periksa log.")
         return
     message.from_user.id
@@ -69,7 +69,7 @@ async def useradd(_, message: Message):
     added = await add_sudo(user_id)
     if added:
         await message.reply_text(f"Ditambahkan **{mention}** Sebagai Pengguna Sudo")
-        return os.execvp("python3", ["python3", "-m", "Music"])
+        return os.execvp("python3", ["python3", "-m", "Hero"])
     await edit_or_reply(message, text="Terjadi kesalahan, periksa log.")
     return
 
@@ -92,7 +92,7 @@ async def userdel(_, message: Message):
         removed = await remove_sudo(user.id)
         if removed:
             await message.reply_text(f"Menghapus **{user.mention}** dari Sudo.")
-            return os.execvp("python3", ["python3", "-m", "Music"])
+            return os.execvp("python3", ["python3", "-m", "Hero"])
         await message.reply_text(f"Sesuatu yang salah terjadi.")
         return
     message.from_user.id
@@ -103,7 +103,7 @@ async def userdel(_, message: Message):
     removed = await remove_sudo(user_id)
     if removed:
         await message.reply_text(f"Menghapus **{mention}** dari Sudo.")
-        return os.execvp("python3", ["python3", "-m", "Music"])
+        return os.execvp("python3", ["python3", "-m", "Hero"])
     await message.reply_text(f"Something wrong happened.")
 
 
