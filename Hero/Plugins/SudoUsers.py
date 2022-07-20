@@ -10,7 +10,7 @@ from pyrogram.types import Message
 
 from config import LOG_SESSION, OWNER_ID, MONGO_DB_URI
 from Hero import BOT_ID, BOT_USERNAME, MUSIC_BOT_NAME, OWNER_ID, SUDOERS, app
-from YukkiMusic.misc import SUDOERS
+from Hero.misc import SUDOERS
 from Hero.Database import (add_gban_user, add_off, add_on, add_sudo,
                             get_active_chats, get_served_chats, get_sudoers,
                             is_gbanned_user, remove_active_chat,
