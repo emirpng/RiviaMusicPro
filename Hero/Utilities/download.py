@@ -48,7 +48,7 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
     j = 0
     for x in formats:
         check = x["format"]
-        elif type == "video":
+        if type == "video":
             if str(133) in check:
                 j += 1
                 a1 = InlineKeyboardButton(
