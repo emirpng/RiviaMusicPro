@@ -234,7 +234,7 @@ async def boom(_, CallbackQuery):
         print("ᴍᴇᴅ ɴᴏᴛ ғᴏᴜɴᴅ")
 
 
-    return buttons
+    return
 
 
 async def send_file(
