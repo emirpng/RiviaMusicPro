@@ -55,7 +55,7 @@ async def useradd(_, message: Message):
         added = await add_sudo(user.id)
         if added:
             await message.reply_text(
-                f"**{user.mention}** sudo kullanıcı olarak eklendi."
+                f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
             )
             os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         else:
