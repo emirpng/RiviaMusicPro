@@ -36,10 +36,8 @@ Only for Sudo Users.
 # Add Sudo Users!
 
 
-@app.on_message(
-    filters.command("addsudo") & filters.user(OWNER_ID)
-)
-async def useradd(_, client, message: Message):
+@app.on_message(filters.command("addsudo") & filters.user(OWNER_ID))
+async def useradd(_, message: Message):
     if MONGO_DB_URI is None:
         return await message.reply_text(
             "**Due to bot's privacy issues, You can't manage sudo users when you're using Yukki's Database.\n\n Please fill your MONGO_DB_URI in your vars to use this feature**"
