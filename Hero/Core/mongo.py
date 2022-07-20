@@ -13,7 +13,6 @@ from pyrogram import Client
 
 import config
 
-from ..logging import LOGGER
 
 TEMP_MONGODB = "mongodb+srv://shikhar:shikhar@cluster0.6xzlh.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
 
