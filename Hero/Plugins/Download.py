@@ -121,16 +121,11 @@ async def boom(_, CallbackQuery):
         thumb_image_path = result["thumbnails"][0]["url"]
         channel = channel = result["channel"]["name"]
         fetched = f"""
-🔍**ᴛʀᴀᴄᴋ ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ**
+🎸 **Şarkı:** {title}
 
-🌸**ᴛɪᴛʟᴇ:** {title}
+⏳ **Süre:** {duration} dakika
 
-⏳**ᴅᴜʀᴀᴛɪᴏɴ:** {duration} Mins
-🧿**ᴠɪᴇᴡs:** `{views}`
-🎥**ᴄʜᴀɴɴᴇʟ ɴᴀᴍᴇ:** {channel}
-🔗**ᴠɪᴅᴇᴏ ʟɪɴᴋ:** [Link]({yturl})
-
-⚡️ __ʏᴏᴜᴛᴜʙᴇ ɪɴʟɪɴᴇ ᴅᴏᴡɴʟᴏᴀᴅ ᴘᴏᴡᴇʀᴇᴅ ʙʏ {MUSIC_BOT_NAME}__"""
+[🔸🔷 BirazdaMuzik 🔷🔸](https://t.me/BirazdaMuzik)"""
     filext = "%(title)s.%(ext)s"
     userdir = os.path.join(os.getcwd(), "downloads", str(user_id))
     if not os.path.isdir(userdir):
