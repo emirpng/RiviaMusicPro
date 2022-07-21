@@ -19,7 +19,7 @@ async def unban_assistant_(_, CallbackQuery):
     a = await app.get_chat_member(CallbackQuery.message.chat.id, BOT_ID)
     if not a.can_restrict_members:
         return await CallbackQuery.answer(
-            "**Üzgünüm, benim yasaklama ve kaldırma yetkim yok. Lütfen kendiniz kaldırın.**",
+            "Üzgünüm, benim yasaklama ve kaldırma yetkim yok. Lütfen kendiniz kaldırın.",
             show_alert=True,
         )
     else:
@@ -71,7 +71,7 @@ def AssistantAdd(mystic):
             )
             if b.status == "kicked":
                 return await message.reply_text(
-                    f"Asistan, grubunuz veya kanalınızda yasaklanmış, lütfen yasağı kaldırın.\n\n**Asistan Kullanıcı Adı::** @{ASS_USERNAME}\n**Asistan ID:** [{ASS_ID}]",
+                    f"Asistan, grubunuz veya kanalınızda yasaklanmış, lütfen yasağı kaldırın.\n\n**Asistan Kullanıcı Adı::** [{ASS_NAME}](tg://user?id={ASS_ID})\n**Asistan ID:** [{ASS_ID}]",
                     reply_markup=key,
                 )
             if b.status == "banned":
