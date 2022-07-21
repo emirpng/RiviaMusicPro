@@ -150,7 +150,7 @@ async def custom_start_stream(
         final_output = await message.reply_photo(
             photo=thumb,
             caption=(
-                f"🎬<b>Şarkı deneme: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>Süre:</b> {duration_min} \n💡<b>__ɪɴғᴏ:__</b>\n👤<b>İsteyen: </b>{message.from_user.mention} \n🚧<b>Mevcut Sıra:</b> <b>#{position}</b>"
+                f"🎧 <b>Sıraya Alındı #{position}</b>\n\n**🎸 Başlık:** [{title[:25]}]\n⌚️ <b>Süre:</b> {duration_min}\n🙂 <b>Talep Eden:</b> {message.from_user.mention}"
             ),
             reply_markup=InlineKeyboardMarkup(buttons),
         )
@@ -159,7 +159,7 @@ async def custom_start_stream(
         return
     else:
         if not await join_stream(message.chat.id, file):
-            return await mystic.edit("ᴇʀʀᴏʀ ᴊᴏɪɴɪɴɢ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ...")
+            return await mystic.edit("Sesli sohbete katılınmadı. Bir sesli sohbet olduğundan emin olun.")
         get_queue[message.chat.id] = []
         got_queue = get_queue.get(message.chat.id)
         title = title
@@ -173,7 +173,7 @@ async def custom_start_stream(
             videoid, message.from_user.id, duration_min, duration_min
         )
         await mystic.delete()
-        cap = f"🎧 <b>Oynatılıyor</b>\n\n**[{title[:25]}] \n🙂 **Talep Eden:** {message.from_user.mention}"
+        cap = f"🎧 <b>Oynatılıyor</b>\n\n**~ {title[:25]}\n🙂 **Talep Eden:** {message.from_user.mention}"
         final_output = await message.reply_photo(
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
