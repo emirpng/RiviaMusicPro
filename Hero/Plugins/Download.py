@@ -20,13 +20,10 @@ flex = {}
 
 __MODULE__ = "ɢ-ʙᴀɴ"
 __HELP__ = """
-
 **ɴᴏᴛᴇ:**
 ᴏɴʟʏ ғᴏʀ sᴜᴅᴏ ᴜsᴇʀs.
-
 `/gban` [ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴜsᴇʀ]
 - ʙᴀɴ ᴀ ᴜsᴇʀ ɢʟᴏʙᴀʟʟʏ ɪɴ ʙᴏᴛ's sᴇʀᴠᴇᴅ ᴄʜᴀᴛs ᴀɴᴅ ᴘʀᴇᴠᴇɴᴛs ᴜsᴇʀ ғʀᴏᴍ ᴜsɪɴɢ ʙᴏᴛ ᴄᴏᴍᴍᴀɴᴅs.
-
 `/ungban` [ᴜsᴇʀɴᴀᴍᴇ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀ ᴜsᴇʀ]
 - ʀᴇᴍᴏᴠᴇ ᴀ ᴜsᴇʀ ғʀᴏᴍ ʙᴏᴛ's ɢʙᴀɴ ʟɪsᴛ.
 """
@@ -61,7 +58,9 @@ async def ytdata(_, CallbackQuery):
     await CallbackQuery.answer()
     callback_data = CallbackQuery.data.strip()
     callback_request = callback_data.split(None, 1)[1]
-    key = await get_formats(CallbackQuery, videoid, user_id, type)
+    type, format, videoid = callback_request.split("||")
+    user_id = CallbackQuery.from_user.id
+    key = get_type(type, format, videoid, user_id)
     try:
         await CallbackQuery.edit_message_reply_markup(reply_markup=key)
     except:
@@ -119,16 +118,9 @@ async def boom(_, CallbackQuery):
         thumb_image_path = result["thumbnails"][0]["url"]
         channel = channel = result["channel"]["name"]
         fetched = f"""
-🔍**ᴛʀᴀᴄᴋ ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ**
-
-🌸**ᴛɪᴛʟᴇ:** {title}
-
-⏳**ᴅᴜʀᴀᴛɪᴏɴ:** {duration} Mins
-🧿**ᴠɪᴇᴡs:** `{views}`
-🎥**ᴄʜᴀɴɴᴇʟ ɴᴀᴍᴇ:** {channel}
-🔗**ᴠɪᴅᴇᴏ ʟɪɴᴋ:** [Link]({yturl})
-
-⚡️ __ʏᴏᴜᴛᴜʙᴇ ɪɴʟɪɴᴇ ᴅᴏᴡɴʟᴏᴀᴅ ᴘᴏᴡᴇʀᴇᴅ ʙʏ {MUSIC_BOT_NAME}__"""
+🎸 **Şarkı:** {title}
+⏳ **Süre:** {duration} dakika
+[🔸🔷 BirazdaMuzik 🔷🔸](https://t.me/BirazdaMuzik)"""
     filext = "%(title)s.%(ext)s"
     userdir = os.path.join(os.getcwd(), "downloads", str(user_id))
     if not os.path.isdir(userdir):
@@ -252,7 +244,7 @@ async def send_file(
         )
         buttons = p_mark(link, channel)
         await CallbackQuery.edit_message_media(
-            media=med, reply_markup=InlineKeyboardMarkup(buttons)
+            media=med
         )
     except Exception as e:
         buttons = inl_mark(videoid, user_id)
