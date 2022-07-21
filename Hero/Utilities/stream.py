@@ -59,7 +59,7 @@ async def start_stream(
         final_output = await CallbackQuery.message.reply_photo(
             photo=thumb,
             caption=(
-                f"🎬<b>Şarkı: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>Süre:</b> {duration_min} \n💡<b>Bilgi:</b> [ɢᴇᴛ ᴀᴅᴅɪᴛɪᴏɴᴀʟ ɪɴғᴏʀᴍᴀᴛɪᴏɴ](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤<b>Oynatan: </b>{CallbackQuery.from_user.mention} \n⃣<b>Mevcut Sıra:</b> <b>#{position}</b>"
+                f"<b>🎧 Müzik Başladı<b>\n\n🎸 <b>Şarkı: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid})\n🙂 <b>Talep Eden: </b>{CallbackQuery.from_user.mention} \n⃣<b>Mevcut Sıra:</b> <b>#{position}</b>"
             ),
             reply_markup=InlineKeyboardMarkup(buttons),
         )
@@ -83,7 +83,7 @@ async def start_stream(
             videoid, CallbackQuery.from_user.id, duration_min, duration_min
         )
         await mystic.delete()
-        cap = f"🎥<b>Oynatılıyor: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n💡<b>Bilgi:</b> [ɢᴇᴛ ᴀᴅᴅɪᴛɪᴏɴᴀʟ ɪɴғᴏʀᴍᴀᴛɪᴏɴ](https://t.me/{BOT_USERNAME}?start=info_{videoid})\n👤**Oynatan:** {CallbackQuery.from_user.mention}"
+        cap = f"🎥 Video Yayını\n\n<b>Video: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid})\n🙂 **Talep Eden:** {CallbackQuery.from_user.mention}"
         final_output = await CallbackQuery.message.reply_photo(
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
