@@ -72,37 +72,37 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
                 j += 1
                 a1 = InlineKeyboardButton(
                     text=f"(240)ᴘ = {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
             if str(134) in check:
                 j += 1
                 a2 = InlineKeyboardButton(
                     text=f"(360)ᴘ = {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
             if str(135) in check:
                 j += 1
                 a3 = InlineKeyboardButton(
                     text=f"(480)ᴘ = {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
             if str(136) in check:
                 j += 1
                 a4 = InlineKeyboardButton(
                     text=f"(720)ᴘ = {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
             if str(137) in check:
                 j += 1
                 a5 = InlineKeyboardButton(
                     text=f"(1080)ᴘ 📹 {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
             if str(313) in check:
                 j += 1
                 a6 = InlineKeyboardButton(
                     text=f"(2160)ᴘ 📹 {humanbytes(x['filesize'])}",
-                    callback_data=f"ytdata video||{x['format_id']}||{videoid}",
+                    callback_data=f"boom video||{x['format_id']}||{videoid}",
                 )
         else:
             return await CallbackQuery.message.reply_text(
