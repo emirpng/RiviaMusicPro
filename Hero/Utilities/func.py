@@ -150,7 +150,7 @@ async def custom_start_stream(
         final_output = await message.reply_photo(
             photo=thumb,
             caption=(
-                f"🎬<b>Şarkı: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>Süre:</b> {duration_min} \n💡<b>__ɪɴғᴏ:__</b>\n👤<b>İsteyen: </b>{message.from_user.mention} \n🚧<b>Mevcut Sıra:</b> <b>#{position}</b>"
+                f"🎬<b>Şarkı deneme: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n⏳<b>Süre:</b> {duration_min} \n💡<b>__ɪɴғᴏ:__</b>\n👤<b>İsteyen: </b>{message.from_user.mention} \n🚧<b>Mevcut Sıra:</b> <b>#{position}</b>"
             ),
             reply_markup=InlineKeyboardMarkup(buttons),
         )
