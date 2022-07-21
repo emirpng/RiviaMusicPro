@@ -33,7 +33,7 @@ from Hero.Utilities.youtube import (get_yt_info_id, get_yt_info_query,
 from Hero.Utilities.func import mplay_stream, vplay_stream
 
 @app.on_message(
-    commandpro(["/p", "Play", "/play", "/oynat", "/play@{BOT_USERNAME}"]) & filters.group
+    commandpro(["/p", "Play", "/play", "/play@{BOT_USERNAME}"]) & filters.group
 )
 @checker
 @logging
@@ -70,13 +70,13 @@ async def mplayaa(_, message: Message):
             pass
         if audio.file_size > 1073741824:
             return await mystic.edit_text(
-                "Ses dosyası boyutu 150 MB'den az olmalıdır."
+                "ᴀᴜᴅɪᴏ ғɪʟᴇ sɪᴢᴇ sʜᴏᴜʟᴅ ʙᴇ ʟᴇss ᴛʜᴀɴ 𝟷𝟻𝟶 ᴍʙ"
             )
         duration_min = seconds_to_min(audio.duration)
         duration_sec = audio.duration
         if (audio.duration) > DURATION_LIMIT:
             return await mystic.edit_text(
-                f"**Süre limiti aşıldı**\n\n**İzin verilen: **{DURATION_LIMIT_MIN} dakika\n**Oynatmak istediğiniz::** {duration_min} dakika"
+                f"**ᴅᴜʀᴀᴛɪᴏɴ ʟɪᴍɪᴛ ᴇxᴄᴇᴇᴅᴇᴅ**\n\n**ᴀʟʟᴏᴡᴇᴅ ᴅᴜʀᴀᴛɪᴏɴ: **{DURATION_LIMIT_MIN} ᴍɪɴᴜᴛᴇs\n**ʀᴇᴄᴇɪᴠᴇᴅ ᴅᴜʀᴀᴛɪᴏɴ:** {duration_min} minute(s)"
             )
         file_name = (
             audio.file_unique_id
@@ -103,9 +103,9 @@ async def mplayaa(_, message: Message):
             mystic,
         )
     elif video:
-        return await message.reply_text("`/oynat` ya da `/voynat` sesli sohbette ses veya video oynatma komutlarıdır.")
+        return await message.reply_text("ᴜsᴇ `/play` ᴏʀ `/vplay` ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴘʟᴀʏ ᴀᴜᴅɪᴏ ᴏʀ ᴠɪᴅᴇᴏ ɪɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ...")
     elif url:
-        mystic = await message.reply_text("🔄 URL işleniyor..")
+        mystic = await message.reply_text("🔄 ᴘʀᴏᴄᴇssɪɴɢ ᴜʀʟ....")
         if not message.reply_to_message:
             query = message.text.split(None, 1)[1]
         else:
@@ -128,12 +128,12 @@ async def mplayaa(_, message: Message):
             await message.reply_photo(
                 photo="Utils/Playlist.jpg",
                 caption=(
-                    "**Şu şekilde kullanın:\n\n`/voynat` [Şarkı adı veya YT Linki veya şarkı dosyasını yanıtlayın]**"
+                    "**ᴜsᴀɢᴇ:** `/play` [ᴍᴜsɪᴄ ɴᴀᴍᴇ ᴏʀ ʏᴏᴜᴛᴜʙᴇ ʟɪɴᴋ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀᴜᴅɪᴏ ғɪʟᴇ]\n\nɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴘʟᴀʏ ᴘʟᴀʏʟɪsᴛs sᴇʟᴇᴄᴛ ᴛʜᴇ ᴏɴᴇ ғʀᴏᴍ ʙᴇʟᴏᴡ..."
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
             return
-        mystic = await message.reply_text("**Aranıyor...**")
+        mystic = await message.reply_text("**sᴇᴀʀᴄʜɪɴɢ...**")
         query = message.text.split(None, 1)[1]
         (
             title,
@@ -148,7 +148,7 @@ async def mplayaa(_, message: Message):
 
 
 @app.on_message(
-    commandpro(["/v", "/vplay", "vplay", "/voynat", "/vplay@{BOT_USERNAME}"]) & filters.group
+    commandpro(["/v", "/vplay", "vplay", "/vplay@{BOT_USERNAME}"]) & filters.group
 )
 @checker
 @logging
@@ -159,7 +159,7 @@ async def vplayaaa(_, message: Message):
         db_mem[message.chat.id] = {}
     if message.sender_chat:
         return await message.reply_text(
-            "Bu sohbet grubunda Anonim yöneticisiniz.\nYönetici haklarından Anonim olmayı kapatın."
+            "ʏᴏᴜ'ʀᴇ ᴀɴ __ᴀɴᴏɴʏᴍᴏᴜs ᴀᴅᴍɪɴ__ ɪɴ ᴛʜɪs ᴄʜᴀᴛ ɢʀᴏᴜᴘ...\nʀᴇᴠᴇʀᴛ ʙᴀᴄᴋ ᴛᴏ ᴜsᴇʀ ᴀᴄᴄᴏᴜɴᴛ ғʀᴏᴍ ᴀᴅᴍɪɴ ʀɪɢʜᴛs..."
         )
     audio = (
         (message.reply_to_message.audio or message.reply_to_message.voice)
@@ -173,12 +173,12 @@ async def vplayaaa(_, message: Message):
     )
     url = get_url(message)
     if audio:
-        return await message.reply_text("`/oynat` ya da `/voynat` sesli sohbette ses veya video oynatma komutlarıdır.")
+        return await message.reply_text("ᴜsᴇ `/play` ᴏʀ `/vplay` ᴄᴏᴍᴍᴀɴᴅs ᴛᴏ ᴘʟᴀʏ ᴀᴜᴅɪᴏ ᴏʀ ᴠɪᴅᴇᴏ ɪɴ ᴠᴏɪᴄᴇ ᴄʜᴀᴛ...")
     elif video:
         limit = await get_video_limit(141414)
         if not limit:
             return await message.reply_text(
-                "**Çağrılar için sınır tanımlanmadı**\n\n/set_video_limit komutu ile botta izin verilen maksimum görüntülü arama sayısı için bir sınır belirleyin [Yalnızca SudoUsers]"
+                "**ɴᴏ ʟɪᴍɪᴛ ᴅᴇғɪɴᴇᴅ ғᴏʀ ᴠɪᴅᴇᴏ ᴄᴀʟʟs**\n\nsᴇᴛ ᴀ ʟɪᴍɪᴛ ғᴏʀ ɴᴜᴍʙᴇʀ ᴏғ ᴍᴀxɪᴍᴜᴍ ᴠɪᴅᴇᴏ ᴄᴀʟʟs ᴀʟʟᴏᴡᴇᴅ ᴏɴ ʙᴏᴛ ʙʏ `/set_video_limit` [sᴜᴅᴏ ᴜsᴇʀs ᴏɴʟʏ]"
             )
         count = len(await get_active_video_chats())
         if int(count) == int(limit):
@@ -186,16 +186,16 @@ async def vplayaaa(_, message: Message):
                 pass
             else:
                 return await message.reply_text(
-                    "Üzgünüz bot, işlemci aşırı yükleme sorunları nedeniyle yalnızca sınırlı sayıda aramaya izin verir.  Diğer sohbetler şu anda görüntülü aramayı kullanıyor.  Sese geçmeyi deneyin veya daha sonra tekrar deneyin.."
+                    "sᴏʀʀʏ ʙᴏᴛ ᴏɴʟʏ ᴀʟʟᴏᴡs ʟɪᴍɪᴛᴇᴅ ɴᴜᴍʙᴇʀ ᴏғ ᴠɪᴅᴇᴏ ᴄᴀʟʟs ᴅᴜᴇ ᴛᴏ ᴄᴘᴜ ᴏᴠᴇʀʟᴏᴀᴅ ɪssᴜᴇs. ᴍᴀɴʏ ᴏᴛʜᴇʀ ᴄʜᴀᴛs ᴀʀᴇ ᴜsɪɴɢ ᴠɪᴅᴇᴏ ᴄᴀʟʟ ʀɪɢʜᴛ ɴᴏᴡ. ᴛʀʏ sᴡɪᴛᴄʜɪɴɢ ᴛᴏ ᴀᴜᴅɪᴏ ᴏʀ ᴛʀʏ ᴀɢᴀɪɴ ʟᴀᴛᴇʀ..."
                 )
         mystic = await message.reply_text(
-            "🔄 Video işleniyor.."
+            "🔄 ᴘʀᴏᴄᴇssɪɴɢ ᴠɪᴅᴇᴏ..."
         )
         try:
             read = db_mem[message.chat.id]["live_check"]
             if read:
                 return await mystic.edit(
-                    "Canlı Yayın../nMüzik oynatmak için durdur."
+                    "ʟɪᴠᴇs sᴛʀᴇᴀᴍɪɴɢ.../nsᴛᴏᴘ ɪᴛ ᴛᴏ ᴘʟᴀʏ ᴍᴜsɪᴄ..."
                 )
             else:
                 pass
@@ -209,7 +209,7 @@ async def vplayaaa(_, message: Message):
             mystic,
         )
     elif url:
-        mystic = await message.reply_text("🔄 URL işleniyor..")
+        mystic = await message.reply_text("🔄 ᴘʀᴏᴄᴇssɪɴɢ ᴜʀʟ...")
         if not message.reply_to_message:
             query = message.text.split(None, 1)[1]
         else:
@@ -232,12 +232,12 @@ async def vplayaaa(_, message: Message):
             await message.reply_photo(
                 photo="Utils/Playlist.jpg",
                 caption=(
-                    "**Şu şekilde kullanın:\n\n`/voynat` [Şarkı adı veya YT Linki veya şarkı dosyasını yanıtlayın]**"
+                    "**ᴜsᴀɢᴇ:** `/vplay` [ᴍᴜsɪᴄ ɴᴀᴍᴇ ᴏʀ ʏᴏᴜᴛᴜʙᴇ ʟɪɴᴋ ᴏʀ ʀᴇᴘʟʏ ᴛᴏ ᴀᴜᴅɪᴏ]\n\nɪғ ʏᴏᴜ ᴡᴀɴᴛ ᴛᴏ ᴘʟᴀʏ ᴘʟᴀʏʟɪsᴛs sᴇʟᴇᴄᴛ ᴛʜᴇ ᴏɴᴇ ғʀᴏᴍ ʙᴇʟᴏᴡ..."
                 ),
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
             return
-        mystic = await message.reply_text("🔄 İşleniyor...")
+        mystic = await message.reply_text("🔄 ᴘʀᴏᴄᴇssɪɴɢ...")
         query = message.text.split(None, 1)[1]
         (
             title,
