@@ -58,7 +58,7 @@ async def play(_, message: Message):
         buttons = song_download_markup(videoid, message.from_user.id)
         return await message.reply_photo(
             photo=thumb,
-            caption=f"📎Şarkı: **{title}\n\n⏳Süre:** {duration_min} dakika",
+            caption=f"🎸 Şarkı: **{title}\n\n⌚️ Süre:** {duration_min} dakika",
             reply_markup=InlineKeyboardMarkup(buttons),
         )
     else:
