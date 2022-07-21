@@ -63,6 +63,7 @@ async def ytdata(_, CallbackQuery):
     callback_request = callback_data.split(None, 1)[1]
     type, format, videoid = callback_request.split("||")
     user_id = CallbackQuery.from_user.id
+    key = await get_formats(CallbackQuery, videoid, user_id, type)
     try:
         await CallbackQuery.edit_message_reply_markup(reply_markup=key)
     except:
