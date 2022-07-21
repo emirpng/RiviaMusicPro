@@ -147,8 +147,7 @@ async def custom_start_stream(
         duration = duration_min
         to_append = [title, user, duration]
         got_queue.append(to_append)
-        final_output = await message.reply_photo(
-            photo=thumb,
+        final_output = await message.reply_text(
             caption=(
                 f"🎧 <b>Sıraya Alındı #{position}</b>\n\n**🎸 Başlık:** [{title[:25]}]\n⌚️ <b>Süre:</b> {duration_min}\n🙂 <b>Talep Eden:</b> {message.from_user.mention}"
             ),
@@ -174,7 +173,7 @@ async def custom_start_stream(
         )
         await mystic.delete()
         cap = f"🎧 <b>Oynatılıyor</b>\n\n**~ {title[:25]}\n🙂 **Talep Eden:** {message.from_user.mention}"
-        final_output = await message.reply_text(
+        final_output = await message.reply_photo(
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
             caption=cap,
