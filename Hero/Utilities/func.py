@@ -148,11 +148,8 @@ async def custom_start_stream(
         to_append = [title, user, duration]
         got_queue.append(to_append)
         final_output = await message.reply_text(
-            caption=(
                 f"🎧 <b>Sıraya Alındı #{position}</b>\n\n**🎸 Başlık:** [{title[:25]}]\n⌚️ <b>Süre:</b> {duration_min}\n🙂 <b>Talep Eden:</b> {message.from_user.mention}"
-            ),
-            reply_markup=InlineKeyboardMarkup(buttons),
-        )
+            )
         await mystic.delete()        
         os.remove(thumb)
         return
