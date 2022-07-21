@@ -173,7 +173,7 @@ async def custom_start_stream(
             videoid, message.from_user.id, duration_min, duration_min
         )
         await mystic.delete()
-        cap = f"🎥<b>Oynatılıyor: </b>[{title[:25]}](https://www.youtube.com/watch?v={videoid}) \n💡<b>__ɪɴғᴏ:__</b>\n👤**İsteyen:** {message.from_user.mention}"
+        cap = f"🎧 <b>Oynatılıyor</b>\n\n**[{title[:25]}] \n🙂 **Talep Eden:** {message.from_user.mention}"
         final_output = await message.reply_photo(
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
