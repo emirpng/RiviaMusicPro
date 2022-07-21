@@ -54,17 +54,17 @@ async def get_formats(CallbackQuery, videoid, user_id, type):
                 if j == 1:
                     a1 = InlineKeyboardButton(
                         text=f"Low Kalite Ses == {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
+                        callback_data=f"boom audio||{x['format_id']}||{videoid}",
                     )
                 if j == 2:
                     a2 = InlineKeyboardButton(
                         text=f"Medium Kalite Ses == {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
+                        callback_data=f"boom audio||{x['format_id']}||{videoid}",
                     )
                 if j == 3:
                     a3 = InlineKeyboardButton(
                         text=f"High Kalite Ses == {humanbytes(x['filesize'])}",
-                        callback_data=f"ytdata audio||{x['format_id']}||{videoid}",
+                        callback_data=f"boom audio||{x['format_id']}||{videoid}",
 
                     )
         elif type == "video":
