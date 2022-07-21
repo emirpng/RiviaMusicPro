@@ -236,7 +236,7 @@ async def admins(_, message: Message):
                     )
             else:
                 mystic = await message.reply_text(
-                    f"**{MUSIC_BOT_NAME} ᴍᴇᴅʏᴀ ɪɴᴅɪʀɪᴄɪ**\n**Şarkı:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
+                    f"**🔄 Müzik İndiriliyor... Lütfen Bekleyin..."
                 )
                 (
                     title,
@@ -245,7 +245,7 @@ async def admins(_, message: Message):
                     thumbnail,
                 ) = get_yt_info_id(videoid)
                 await mystic.edit(
-                    f"**{MUSIC_BOT_NAME} ᴍᴇᴅʏᴀ ɪɴᴅɪʀɪᴄɪ**\n**Şarkı:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
+                    f"🔄 Müzik İndiriliyor... Lütfen Bekleyin..."
                 )
                 downloaded_file = await loop.run_in_executor(
                     None, download, videoid, mystic, title
