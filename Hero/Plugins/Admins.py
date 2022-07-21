@@ -58,7 +58,7 @@ async def admins(_, message: Message):
     if not len(message.command) == 1:
         return await message.reply_text("Hata: Yanlış komut kullanımı.")
     if not await is_active_chat(message.chat.id):
-        return await message.reply_text("Sesli sohbette hiçbir şey çalmıyor.")
+        return await message.reply_text("Bot sesli sohbette yayın yapmıyor.")
     chat_id = message.chat.id
     if message.command[0][1] == "u":
         if not await is_music_playing(message.chat.id):
@@ -66,7 +66,7 @@ async def admins(_, message: Message):
         await music_off(chat_id)
         await pause_stream(chat_id)
         await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından durduruldu."
+            f"🎧 Sesli sohbet {message.from_user.mention} tarafından duraklatıldı."
         )
     if message.command[0][1] == "e":
         if await is_music_playing(message.chat.id):
@@ -74,7 +74,7 @@ async def admins(_, message: Message):
         await music_on(chat_id)
         await resume_stream(chat_id)
         await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından devam ettirildi."
+            f"🎧 Sesli sohbet {message.from_user.mention} tarafından devam ettirildi."
         )
     if message.command[0][1] == "o" or message.command[0][1] == "i":
         if message.chat.id not in db_mem:
@@ -89,7 +89,7 @@ async def admins(_, message: Message):
         await remove_active_video_chat(chat_id)
         await stop_stream(chat_id)
         await message.reply_text(
-            f"🎧 Şarkı {message.from_user.mention} tarafından sonlandırıldı. Asistan sohbetten ayrıldı."
+            f"**🎧 Sesli sohbet {message.from_user.mention} tarafından sonlandırıldı.**"
         )
     if message.command[0][1] == "t":
         if message.chat.id not in db_mem:
