@@ -173,7 +173,6 @@ async def custom_start_stream(
         )
         await mystic.delete()
         cap = f"🎧 <b>Oynatılıyor</b>\n\n**~ {title[:25]}\n🙂 **Talep Eden:** {message.from_user.mention}"
-            photo=thumb,
         final_output = await message.reply_photo(
             photo=thumb,
             reply_markup=InlineKeyboardMarkup(buttons),
