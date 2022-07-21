@@ -11,13 +11,22 @@ from Hero import SUDOERS, app, random_assistant
 from Hero.Database import get_assistant, save_assistant
 from Hero.Utilities.assistant import get_assistant_details
 
-__MODULE__ = "ᴀꜱɪꜱᴛᴀɴ"
+__MODULE__ = "ᴀssɪsᴛᴀɴᴛ"
 __HELP__ = f"""
 
 
-`/sorguasistan`
-- Grubunuzda olan mevcut asistanı kontrol edin.
+`/checkassistant`
+- ᴄʜᴇᴄᴋ ᴛʜᴇ ᴀʟʟᴏᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ ᴏғ ʏᴏᴜʀ ᴄʜᴀᴛ
 
+
+**ɴᴏᴛᴇ:**
+-ᴏɴʟʏy ғᴏʀ sᴜᴅᴏ ᴜsᴇʀs
+
+`/changeassistant` [ᴀss ɴᴜᴍʙᴇʀ]
+- ᴄʜᴀɴɢᴇ ᴛʜᴇ ᴘʀᴇᴠɪᴏɪᴜs ᴀʟʟᴏᴛᴇᴅ ᴀssɪsᴛᴀɴᴛ ᴛᴏ ɴᴇᴡ ᴏɴᴇ.
+
+`/setassistant` [ᴀss ɴᴜᴍʙᴇʀ ᴏʀ ʀᴀɴᴅᴏᴍ]
+- sᴇᴛ ᴀ ᴀssɪsᴛᴀɴᴛ ᴀᴄᴄᴏᴜɴᴛ ғᴏʀ ᴄʜᴀᴛ. 
 """
 
 
@@ -80,7 +89,7 @@ async def assis_change(_, message: Message):
         )
 
 
-@app.on_message(filters.command("sorguasistan") & filters.group)
+@app.on_message(filters.command("checkassistant") & filters.group)
 async def check_ass(_, message: Message):
     _assistant = await get_assistant(message.chat.id, "assistant")
     if not _assistant:
