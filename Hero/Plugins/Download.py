@@ -13,7 +13,7 @@ from youtubesearchpython import VideosSearch
 
 from Hero import MUSIC_BOT_NAME, app
 from Hero.Utilities.changers import time_to_seconds
-from Hero.Utilities.download import get_formats
+from Hero.Utilities.download import get_formats, get_type
 
 user_time = {}
 flex = {}
@@ -55,6 +55,19 @@ async def getspy(_, CallbackQuery):
     except:
         pass
 
+
+@app.on_callback_query(filters.regex(pattern=r"ytdata"))
+async def ytdata(_, CallbackQuery):
+    await CallbackQuery.answer()
+    callback_data = CallbackQuery.data.strip()
+    callback_request = callback_data.split(None, 1)[1]
+    type, format, videoid = callback_request.split("||")
+    user_id = CallbackQuery.from_user.id
+    key = get_type(type, format, videoid, user_id)
+    try:
+        await CallbackQuery.edit_message_reply_markup(reply_markup=key)
+    except:
+        pass
 
 
 inl = InlineKeyboardMarkup(
@@ -108,11 +121,16 @@ async def boom(_, CallbackQuery):
         thumb_image_path = result["thumbnails"][0]["url"]
         channel = channel = result["channel"]["name"]
         fetched = f"""
-🎸 **Şarkı:** {title}
+🔍**ᴛʀᴀᴄᴋ ᴅᴏᴡɴʟᴏᴀᴅᴇᴅ**
 
-⏳ **Süre:** {duration} dakika
+🌸**ᴛɪᴛʟᴇ:** {title}
 
-[🔸🔷 BirazdaMuzik 🔷🔸](https://t.me/BirazdaMuzik)"""
+⏳**ᴅᴜʀᴀᴛɪᴏɴ:** {duration} Mins
+🧿**ᴠɪᴇᴡs:** `{views}`
+🎥**ᴄʜᴀɴɴᴇʟ ɴᴀᴍᴇ:** {channel}
+🔗**ᴠɪᴅᴇᴏ ʟɪɴᴋ:** [Link]({yturl})
+
+⚡️ __ʏᴏᴜᴛᴜʙᴇ ɪɴʟɪɴᴇ ᴅᴏᴡɴʟᴏᴀᴅ ᴘᴏᴡᴇʀᴇᴅ ʙʏ {MUSIC_BOT_NAME}__"""
     filext = "%(title)s.%(ext)s"
     userdir = os.path.join(os.getcwd(), "downloads", str(user_id))
     if not os.path.isdir(userdir):
@@ -236,7 +254,7 @@ async def send_file(
         )
         buttons = p_mark(link, channel)
         await CallbackQuery.edit_message_media(
-            media=med
+            media=med, reply_markup=InlineKeyboardMarkup(buttons)
         )
     except Exception as e:
         buttons = inl_mark(videoid, user_id)
