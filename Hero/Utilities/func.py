@@ -85,7 +85,7 @@ async def mplay_stream(message,MusicData):
         )
     mystic = await message.reply_text(f"🔄 Müzik İndiriliyor... Lütfen Bekleyin... {title[:20]}")
     await mystic.edit(
-        f"**{MUSIC_BOT_NAME} İndirici**\n**Şarkı:** {title[:50]}\n\n0% ▓▓▓▓▓▓▓▓▓▓▓▓ 100%"
+        f"**🔄 Müzik İndiriliyor... Lütfen Bekleyin... {title[:50]}"
     )
     downloaded_file = await loop.run_in_executor(
         None, download, videoid, mystic, title
