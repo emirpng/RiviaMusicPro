@@ -133,7 +133,7 @@ async def mplayaa(_, message: Message):
                 reply_markup=InlineKeyboardMarkup(buttons),
             )
             return
-        mystic = await message.reply_text("**sᴇᴀʀᴄʜɪɴɢ...**")
+        mystic = await message.reply_text("")
         query = message.text.split(None, 1)[1]
         (
             title,
