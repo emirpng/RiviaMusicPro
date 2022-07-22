@@ -84,7 +84,6 @@ async def mplay_stream(message,MusicData):
             f"**Süre limiti aşıldı**\n\n**İzin verilen: **{DURATION_LIMIT_MIN} dakika\n**Oynatmak istediğiniz::** {duration_min} dakika"
         )
     mystic = await message.reply_text(f"**🔄 Müzik İndiriliyor... Lütfen Bekleyin...**")
-    await mystic
     downloaded_file = await loop.run_in_executor(
         None, download, videoid, mystic, title
     )
