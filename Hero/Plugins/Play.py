@@ -117,7 +117,6 @@ async def mplayaa(_, message: Message):
             thumb,
             videoid,
         ) = get_yt_info_query(query)
-        await mystic.delete()        
         MusicData = f"MusicStream {videoid}|{duration_min}|{message.from_user.id}"
         return await mplay_stream(message,MusicData)
     else:
