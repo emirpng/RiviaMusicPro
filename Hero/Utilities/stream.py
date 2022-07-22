@@ -130,7 +130,7 @@ async def start_stream_audio(
         to_append = [title, user, duration]
         got_queue.append(to_append)
         final_output = await message.reply_photo(
-            photo="Utils/Telegram.JPEG",
+            photo="Utils/Telegram.jpeg",
             caption=(
                 f"🎬<b>Şarkı: </b> [Telegram ile verilen şarkı]({link})\n⏳<b>Süre:</b> {duration_min} \n👤<b>Oynatan: </b>{message.from_user.mention} \n⃣<b>Mevcut Sıra:</b> <b>#{position}!</b>"
             ),
@@ -158,7 +158,7 @@ async def start_stream_audio(
         await mystic.delete()
         cap = f"🎥<b>Oynatılıyor: </b>[Telegram ile verilen şarkı]({link})\n👤**Oynatan:** {message.from_user.mention}"
         final_output = await message.reply_photo(
-            photo="Utils/Telegram.JPEG",
+            photo="Utils/Telegram.jpeg",
             reply_markup=InlineKeyboardMarkup(buttons),
             caption=cap,
         )
