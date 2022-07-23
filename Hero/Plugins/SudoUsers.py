@@ -70,7 +70,6 @@ async def useradd(_, message: Message):
         await message.reply_text(
             f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
         )
-        os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     else:
         await message.reply_text("Failed")
     return
