@@ -41,7 +41,7 @@ async def useradd(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
             await message.reply_text(
-                "Bir kullanıcının mesajını yanıtlayın veya username/user_id verin."
+                "Reply to a user's message or give username/user_id."
             )
             return
         user = message.text.split(None, 1)[1]
@@ -50,25 +50,25 @@ async def useradd(_, message: Message):
         user = await app.get_users(user)
         if user.id in SUDOERS:
             return await message.reply_text(
-                f"{user.mention} zaten bir sudo kullanıcısı."
+                f"{user.mention} is already a sudo user."
             )
         added = await add_sudo(user.id)
         if added:
             await message.reply_text(
-                f"**{message.reply_to_message.from_user.mention}** sudo kullanıcı olarak eklendi."
+                f"Added **{user.mention}** to Sudo Users."
             )
             os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         else:
-            await message.reply_text("Hata oluştu")
+            await message.reply_text("Failed")
         return
     if message.reply_to_message.from_user.id in SUDOERS:
         return await message.reply_text(
-            f"{message.reply_to_message.from_user.mention} zaten bir sudo kullanıcısı."
+            f"{message.reply_to_message.from_user.mention} is already a sudo user."
         )
     added = await add_sudo(message.reply_to_message.from_user.id)
     if added:
         await message.reply_text(
-            f"**{user.mention}** sudo kullanıcı olarak eklendi."
+            f"Added **{message.reply_to_message.from_user.mention}** to Sudo Users"
         )
         os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     else:
@@ -81,7 +81,7 @@ async def userdel(_, message: Message):
     if not message.reply_to_message:
         if len(message.command) != 2:
             await message.reply_text(
-                "Bir kullanıcının mesajını yanıtlayın veya username/user_id verin."
+                "Reply to a user's message or give username/user_id."
             )
             return
         user = message.text.split(None, 1)[1]
@@ -94,7 +94,7 @@ async def userdel(_, message: Message):
         removed = await remove_sudo(user.id)
         if removed:
             await message.reply_text(
-                f"**{message.reply_to_message.from_user.mention}** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
+                f"Removed **{user.mention}** from {MUSIC_BOT_NAME}'s Sudo."
             )
             return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
         await message.reply_text(f"Something wrong happened.")
@@ -109,7 +109,7 @@ async def userdel(_, message: Message):
     removed = await remove_sudo(user_id)
     if removed:
         await message.reply_text(
-            f"**{message.reply_to_message.from_user.mention},** {MUSIC_BOT_NAME}'s Sudo listesinden kaldırıldı."
+            f"Removed **{mention}** from {MUSIC_BOT_NAME}'s Sudo."
         )
         return os.system(f"kill -9 {os.getpid()} && python3 -m Yukki")
     await message.reply_text(f"Something wrong happened.")
@@ -293,7 +293,7 @@ __**New Global Ban on {MUSIC_BOT_NAME}**__
     else:
         is_gbanned = await is_gbanned_user(user_id)
         if is_gbanned:
-            await message.reply_text("Zaten Yasaklanmış")
+            await message.reply_text("Already Gbanned.")
         else:
             await add_gban_user(user_id)
             served_chats = []
@@ -301,7 +301,7 @@ __**New Global Ban on {MUSIC_BOT_NAME}**__
             for chat in chats:
                 served_chats.append(int(chat["chat_id"]))
             m = await message.reply_text(
-                f"**Küresel Yasak Başlatılıyor {mention}**\n\nBeklenilen Süre : {len(served_chats)}"
+                f"**Initializing Gobal Ban on {mention}**\n\nExpected Time : {len(served_chats)}"
             )
             number_of_chats = 0
             for sex in served_chats:
@@ -314,7 +314,7 @@ __**New Global Ban on {MUSIC_BOT_NAME}**__
                 except Exception:
                     pass
             ban_text = f"""
-__**Yeni Küresel Yasak {MUSIC_BOT_NAME}**__
+__**New Global Ban on {MUSIC_BOT_NAME}**__
 **Origin:** {message.chat.title} [`{message.chat.id}`]
 **Sudo User:** {from_user_mention}
 **Banned User:** {mention}
@@ -336,7 +336,7 @@ async def unban_globally(_, message):
     if not message.reply_to_message:
         if len(message.command) != 2:
             await message.reply_text(
-                "**Şu şekilde kullanın:**\n/ungban [USERNAME | USER_ID]"
+                "**Usage:**\n/ungban [USERNAME | USER_ID]"
             )
             return
         user = message.text.split(None, 1)[1]
@@ -346,38 +346,38 @@ async def unban_globally(_, message):
         from_user = message.from_user
         sudoers = await get_sudoers()
         if user.id == from_user.id:
-            await message.reply_text("Engeli kaldırmak mı istiyorsunuz?")
+            await message.reply_text("You want to unblock yourself?")
         elif user.id == BOT_ID:
             await message.reply_text("Should i unblock myself?")
         elif user.id in sudoers:
-            await message.reply_text("Sudo kullanıcıları engellenemez/engel kaldırılamaz.")
+            await message.reply_text("Sudo users can't be blocked/unblocked.")
         else:
             is_gbanned = await is_gbanned_user(user.id)
             if not is_gbanned:
                 await message.reply_text("He's already free, why bully him?")
             else:
                 await remove_gban_user(user.id)
-                await message.reply_text(f"Yasak kaldırıldı!")
+                await message.reply_text(f"Ungbanned!")
         return
     from_user_id = message.from_user.id
     user_id = message.reply_to_message.from_user.id
     mention = message.reply_to_message.from_user.mention
     sudoers = await get_sudoers()
     if user_id == from_user_id:
-        await message.reply_text("Engeli kaldırmak mı istiyorsunuz?")
+        await message.reply_text("You want to unblock yourself?")
     elif user_id == BOT_ID:
         await message.reply_text(
             "Should i unblock myself? But i'm not blocked."
         )
     elif user_id in sudoers:
-        await message.reply_text("Sudo kullanıcıları engellenemez/engel kaldırılamaz.")
+        await message.reply_text("Sudo users can't be blocked/unblocked.")
     else:
         is_gbanned = await is_gbanned_user(user_id)
         if not is_gbanned:
             await message.reply_text("He's already free, why bully him?")
         else:
             await remove_gban_user(user_id)
-            await message.reply_text(f"Yasak kaldırıldı!")
+            await message.reply_text(f"Ungbanned!")
 
 
 # Broadcast Message
@@ -409,7 +409,7 @@ async def broadcast_message_pin_silent(_, message):
             except Exception:
                 pass
         await message.reply_text(
-            f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+            f"**Broadcasted Message In {sent}  Chats with {pin} Pins.**"
         )
         return
     if len(message.command) < 2:
@@ -437,7 +437,7 @@ async def broadcast_message_pin_silent(_, message):
         except Exception:
             pass
     await message.reply_text(
-        f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+        f"**Broadcasted Message In {sent} Chats and {pin} Pins.**"
     )
 
 
@@ -467,7 +467,7 @@ async def broadcast_message_pin_loud(_, message):
             except Exception:
                 pass
         await message.reply_text(
-            f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+            f"**Broadcasted Message In {sent}  Chats with {pin} Pins.**"
         )
         return
     if len(message.command) < 2:
@@ -495,7 +495,7 @@ async def broadcast_message_pin_loud(_, message):
         except Exception:
             pass
     await message.reply_text(
-        f"**{sent} Sohbette yayınlanan mesaj ve {pin} pin.**"
+        f"**Broadcasted Message In {sent} Chats and {pin} Pins.**"
     )
 
 
